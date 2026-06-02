@@ -30,7 +30,7 @@
   --terra:       #C17F6B;
   --terra-light: #FBF0EC;
   /* Layout */
-  --bot-h:    44px;
+  --bot-h:    40px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bot: env(safe-area-inset-bottom, 0px);
 }
@@ -76,10 +76,10 @@ html, body {
   align-items: center; justify-content: center;
   gap: 1px; border: none; background: none; cursor: pointer;
   color: var(--muted); font-family: -apple-system, Arial, sans-serif;
-  font-size: 9px; padding: 2px 2px 0; transition: color 0.2s;
+  font-size: 9px; padding: 0; transition: color 0.2s;
   min-width: 0;
 }
-.nav-tab .ni { font-size: 17px; line-height: 1; transition: transform 0.2s; }
+.nav-tab .ni { font-size: 20px; line-height: 1; transition: transform 0.2s; }
 .nav-tab.active { color: var(--rose); }
 .nav-tab.active .ni { transform: translateY(-2px); }
 .nav-tab span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
