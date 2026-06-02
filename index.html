@@ -55,7 +55,6 @@ html, body {
   position: absolute; inset: 0;
   overflow-y: auto; -webkit-overflow-scrolling: touch;
   display: none;
-  padding-top: var(--safe-top);
   padding-bottom: calc(var(--bot-h) + 6px);
 }
 .tab-screen.active { display: block; }
@@ -95,7 +94,7 @@ html, body {
 
 /* ── HOME TAB ──────────────────────────────── */
 .home-top {
-  padding: calc(var(--safe-top) + 4px) 18px 16px;
+  padding: var(--safe-top) 18px 16px;
   display: flex; align-items: flex-start; justify-content: space-between;
 }
 .home-top-left { flex: 1; }
@@ -216,7 +215,7 @@ html, body {
   position: sticky; top: 0; z-index: 10;
   background: rgba(15,13,10,0.97);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  padding: calc(var(--safe-top) + 4px) 18px 12px;
+  padding: var(--safe-top) 18px 12px;
   border-bottom: 1px solid rgba(201,169,110,0.2);
   display: flex; align-items: center; gap: 12px;
 }
@@ -276,7 +275,7 @@ html, body {
 
 /* ── STARTUP TAB ───────────────────────────── */
 .startup-hero {
-  padding: calc(var(--safe-top) + 4px) 18px 16px;
+  padding: var(--safe-top) 18px 16px;
   background: linear-gradient(160deg, #1A1A1A 0%, #2C2410 100%);
 }
 .startup-tag { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: rgba(201,169,110,0.65); font-family: -apple-system,Arial,sans-serif; font-weight: 600; margin-bottom: 6px; }
@@ -409,16 +408,16 @@ html, body {
 
 /* PWA banner */
 #pwa-banner {
-  margin: 16px 18px 4px;
-  background: var(--gold-light);
-  border: 1px solid #E8D099;
+  margin: 0 18px 14px;
+  background: linear-gradient(135deg, #1A1A1A, #2C2410);
+  border: 1px solid var(--gold);
   border-radius: 14px;
   padding: 13px 14px;
-  display: flex; align-items: flex-start; gap: 10px;
+  display: none; align-items: flex-start; gap: 10px;
 }
-#pwa-banner p { font-size: 12px; color: var(--text); line-height: 1.6; flex: 1; font-family: -apple-system, Arial, sans-serif; }
+#pwa-banner p { font-size: 12px; color: rgba(255,255,255,0.85); line-height: 1.6; flex: 1; font-family: -apple-system, Arial, sans-serif; }
 #pwa-banner strong { color: var(--gold); }
-#pwa-close { background: none; border: none; color: var(--muted); font-size: 17px; cursor: pointer; flex-shrink: 0; padding: 2px; line-height: 1; }
+#pwa-close { background: none; border: none; color: rgba(255,255,255,0.4); font-size: 17px; cursor: pointer; flex-shrink: 0; padding: 2px; line-height: 1; }
 
 /* ── FORBES BADGE ──────────────────────────── */
 .forbes-banner {
@@ -512,7 +511,7 @@ html, body {
   position: sticky; top: 0; z-index: 10;
   background: rgba(250,248,245,0.97);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  padding: calc(var(--safe-top) + 4px) 18px 12px;
+  padding: var(--safe-top) 18px 12px;
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; gap: 12px;
 }
@@ -574,7 +573,7 @@ html, body {
   position: sticky; top: 0; z-index: 10;
   background: rgba(250,248,245,0.97);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  padding: calc(var(--safe-top) + 4px) 18px 12px;
+  padding: var(--safe-top) 18px 12px;
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; gap: 12px;
 }
@@ -739,7 +738,7 @@ textarea.mental-input { resize: none; height: 70px; line-height: 1.7; }
 
 /* ── TODAY TAB ─────────────────────────────── */
 .today-hero {
-  padding: calc(var(--safe-top) + 4px) 18px 14px;
+  padding: var(--safe-top) 18px 14px;
   background: linear-gradient(160deg, var(--rose-light) 0%, var(--gold-light) 100%);
 }
 .today-tag { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: var(--rose); font-family: -apple-system,Arial,sans-serif; font-weight: 700; margin-bottom: 6px; }
@@ -881,7 +880,7 @@ textarea.mental-input { resize: none; height: 70px; line-height: 1.7; }
 
 /* ── GOALS TAB ─────────────────────────────── */
 .goals-hero {
-  padding: calc(var(--safe-top) + 4px) 18px 16px;
+  padding: var(--safe-top) 18px 16px;
 }
 .goals-section {
   margin: 0 18px 20px;
@@ -954,7 +953,7 @@ textarea.mental-input { resize: none; height: 70px; line-height: 1.7; }
   position: sticky; top: 0; z-index: 10;
   background: rgba(250,248,245,0.97);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  padding: calc(var(--safe-top) + 6px) 18px 14px;
+  padding: var(--safe-top) 18px 14px;
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
 }
@@ -976,7 +975,7 @@ textarea.gm-input { height: 80px; }
 
 /* ── CALENDAR TAB ──────────────────────────── */
 .cal-top {
-  padding: calc(var(--safe-top) + 4px) 18px 12px;
+  padding: var(--safe-top) 18px 12px;
   display: flex; align-items: center; justify-content: space-between;
 }
 .cal-nav { background: none; border: none; font-size: 22px; color: var(--muted); cursor: pointer; padding: 6px 10px; }
@@ -1069,7 +1068,7 @@ textarea.gm-input { height: 80px; }
   position: sticky; top: 0; z-index: 10;
   background: rgba(250,248,245,0.97);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  padding: calc(var(--safe-top) + 6px) 18px 14px;
+  padding: var(--safe-top) 18px 14px;
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
 }
@@ -1107,7 +1106,7 @@ textarea.ev-input { resize: none; height: 90px; }
 
 /* ── LIFE TAB ──────────────────────────────── */
 .life-hero {
-  padding: calc(var(--safe-top) + 4px) 18px 16px;
+  padding: var(--safe-top) 18px 16px;
 }
 .life-section { padding: 0 18px 28px; }
 .life-section-title {
@@ -1151,7 +1150,7 @@ textarea.ev-input { resize: none; height: 90px; }
   position: sticky; top: 0; z-index: 10;
   background: rgba(250,248,245,0.97);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  padding: calc(var(--safe-top) + 4px) 18px 12px;
+  padding: var(--safe-top) 18px 12px;
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; gap: 12px;
 }
@@ -1228,6 +1227,12 @@ textarea.ev-input { resize: none; height: 90px; }
           <button class="bp-do" onclick="exportBackup()">Back up</button>
           <button class="bp-skip" onclick="dismissBackupPrompt()">✕</button>
         </div>
+      </div>
+
+      <!-- PWA Install Banner -->
+      <div id="pwa-banner">
+        <p>📲 For the best experience, <strong>Add to Home Screen</strong> — tap the Share button (⎋) then "Add to Home Screen". Runs fullscreen like a native app.</p>
+        <button id="pwa-close" onclick="dismissPWA()">✕</button>
       </div>
 
       <!-- Forbes Banner -->
@@ -1964,7 +1969,7 @@ textarea.ev-input { resize: none; height: 90px; }
   <!-- GROW MODAL -->
   <div id="grow-modal">
 
-    <div style="position:sticky;top:0;z-index:10;background:rgba(250,248,245,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:calc(var(--safe-top) + 4px) 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
+    <div style="position:sticky;top:0;z-index:10;background:rgba(250,248,245,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:var(--safe-top) 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
       <button onclick="closeGrow()" style="background:none;border:none;font-size:24px;color:var(--muted);cursor:pointer;padding:4px;line-height:1;flex-shrink:0;">‹</button>
       <div style="font-size:16px;color:var(--text);flex:1;">Grow — Personal Development</div>
     </div>
@@ -2849,15 +2854,30 @@ function buildWeek() {
 
 // ── PWA ──────────────────────────────────────────────────
 function dismissPWA() {
-  document.getElementById('pwa-banner').style.display='none';
-  localStorage.setItem('nos_pwa','1');
+  document.getElementById('pwa-banner').style.display = 'none';
+  localStorage.setItem('nos_pwa', '1');
 }
 
-// go() is defined in the Calendar section above
+function initPWABanner() {
+  // Only show in Safari browser, not when installed as home screen app
+  const isStandalone = window.navigator.standalone === true
+    || window.matchMedia('(display-mode: standalone)').matches;
+  if (isStandalone) return; // already on home screen — perfect, no banner needed
+  if (localStorage.getItem('nos_pwa') === '1') return; // dismissed before
+  document.getElementById('pwa-banner').style.display = 'flex';
+}
 
 // ── VIEWPORT ─────────────────────────────────────────────
-function fixH() { document.getElementById('app').style.height = window.innerHeight+'px'; }
-fixH(); window.addEventListener('resize', fixH);
+// Use visualViewport for accuracy on iPhone (accounts for Safari chrome shrinking)
+function fixH() {
+  const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  document.getElementById('app').style.height = h + 'px';
+}
+fixH();
+window.addEventListener('resize', fixH);
+if (window.visualViewport) window.visualViewport.addEventListener('resize', fixH);
+// Refresh height when returning to app (e.g. from background)
+document.addEventListener('visibilitychange', () => { if (!document.hidden) fixH(); });
 
 // ── CALENDAR ─────────────────────────────────────────────
 const CAT_COLORS = {
@@ -3239,11 +3259,11 @@ async function exportBackup() {
   const cfg = getGhConfig();
   if (!cfg) { openGhModal(); return; }
 
-  // Collect all nos_ data
+  // Collect all nos_ data — exclude GitHub credentials (never embed in file)
   const data = {};
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
-    if (key && key.startsWith('nos_')) {
+    if (key && key.startsWith('nos_') && key !== 'nos_gh_config') {
       try { data[key] = JSON.parse(localStorage.getItem(key)); }
       catch(e) { data[key] = localStorage.getItem(key); }
     }
@@ -3993,6 +4013,7 @@ function toggleGrow(hd) {
 restoreFromBootstrap(); // must run first — loads data before anything renders
 initGreeting();
 updateBackupBtn();
+initPWABanner();
 initQuote();
 buildStreaks();
 buildUpcoming();
