@@ -123,6 +123,43 @@ html, body {
 .bp-btns { display: flex; gap: 8px; flex-shrink: 0; }
 .bp-do { background: var(--gold); color: white; border: none; border-radius: 10px; padding: 7px 14px; font-size: 12px; font-family: -apple-system,Arial,sans-serif; font-weight: 600; cursor: pointer; }
 .bp-skip { background: none; border: none; color: var(--muted); font-size: 18px; cursor: pointer; padding: 2px; }
+
+/* Backup toast */
+#backup-toast {
+  position: fixed; bottom: calc(var(--bot-h) + var(--safe-bot) + 16px); left: 50%;
+  transform: translateX(-50%) translateY(20px);
+  background: #2C2C2C; color: white; border-radius: 12px;
+  padding: 10px 18px; font-size: 13px; font-family: -apple-system,Arial,sans-serif;
+  opacity: 0; transition: opacity 0.25s, transform 0.25s; z-index: 9999;
+  white-space: nowrap; pointer-events: none;
+}
+#backup-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+/* GitHub setup modal */
+#gh-modal {
+  position: fixed; inset: 0; z-index: 1000;
+  background: rgba(0,0,0,0.5);
+  display: none; align-items: flex-end;
+}
+#gh-modal.open { display: flex; }
+.gh-box {
+  width: 100%; background: var(--ivory);
+  border-radius: 20px 20px 0 0;
+  padding: 24px 18px calc(var(--safe-bot) + 24px);
+}
+.gh-title { font-size: 16px; color: var(--text); font-weight: 400; margin-bottom: 4px; }
+.gh-sub { font-size: 12px; color: var(--muted); font-family: -apple-system,Arial,sans-serif; margin-bottom: 18px; line-height: 1.6; }
+.gh-field { margin-bottom: 14px; }
+.gh-label { font-size: 9.5px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); font-family: -apple-system,Arial,sans-serif; font-weight: 600; margin-bottom: 6px; display: block; }
+.gh-input {
+  width: 100%; background: var(--card); border: 1.5px solid var(--border);
+  border-radius: 12px; padding: 12px 14px; font-size: 14px; color: var(--text);
+  font-family: -apple-system,Arial,sans-serif; outline: none; -webkit-appearance: none;
+}
+.gh-input:focus { border-color: var(--gold); }
+.gh-hint { font-size: 11px; color: var(--muted); font-family: -apple-system,Arial,sans-serif; margin-top: 4px; font-style: italic; }
+.gh-save { width: 100%; background: var(--gold); color: white; border: none; border-radius: 14px; padding: 14px; font-size: 15px; font-weight: 600; font-family: -apple-system,Arial,sans-serif; cursor: pointer; margin-top: 4px; }
+.gh-save:active { opacity: 0.9; }
 .h-time { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--rose); font-family: -apple-system, Arial, sans-serif; font-weight: 600; margin-bottom: 6px; }
 .h-name { font-size: 30px; font-weight: 300; color: var(--text); letter-spacing: -0.5px; line-height: 1.1; }
 .h-name span { color: var(--rose); }
@@ -1179,16 +1216,16 @@ textarea.ev-input { resize: none; height: 90px; }
           <div class="h-name">Nivedita <span>✦</span></div>
           <div class="h-date" id="h-date"></div>
         </div>
-        <button class="backup-btn" onclick="exportBackup()">
-          <span class="bk-icon">↑</span><span>Backup</span>
+        <button class="backup-btn" id="backup-btn" onclick="handleBackupTap()">
+          <span class="bk-icon" id="backup-btn-icon">↑</span><span id="backup-btn-label">Backup</span>
         </button>
       </div>
 
       <!-- Sunday backup prompt -->
       <div id="backup-prompt">
-        <p>It's Sunday — tap to export a <strong>backup index.html</strong> with your data embedded. Commit it to GitHub to keep everything safe.</p>
+        <p>It's Sunday — tap <strong>Back up</strong> to push your data to GitHub automatically.</p>
         <div class="bp-btns">
-          <button class="bp-do" onclick="exportBackup();dismissBackupPrompt()">Back up</button>
+          <button class="bp-do" onclick="exportBackup()">Back up</button>
           <button class="bp-skip" onclick="dismissBackupPrompt()">✕</button>
         </div>
       </div>
@@ -2409,6 +2446,40 @@ textarea.ev-input { resize: none; height: 90px; }
     </div>
   </div>
 
+  <!-- BACKUP TOAST -->
+  <div id="backup-toast"></div>
+
+  <!-- GITHUB SETUP MODAL -->
+  <div id="gh-modal" onclick="closeGhModal(event)">
+    <div class="gh-box">
+      <div class="gh-title">GitHub Backup Setup</div>
+      <div class="gh-sub">One-time setup. After this, tap Backup and your data is pushed to GitHub automatically — no other steps.</div>
+      <div class="gh-field">
+        <label class="gh-label">Personal Access Token</label>
+        <input class="gh-input" id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" autocorrect="off" spellcheck="false">
+        <div class="gh-hint">Settings → Developer settings → Personal access tokens → Fine-grained. Give it Contents: Read & write on your repo.</div>
+      </div>
+      <div class="gh-field">
+        <label class="gh-label">GitHub Username</label>
+        <input class="gh-input" id="gh-owner" type="text" placeholder="your-username" autocomplete="off" autocorrect="off" spellcheck="false">
+      </div>
+      <div class="gh-field">
+        <label class="gh-label">Repository Name</label>
+        <input class="gh-input" id="gh-repo" type="text" placeholder="my-repo" autocomplete="off" autocorrect="off" spellcheck="false">
+      </div>
+      <div class="gh-field">
+        <label class="gh-label">File Path in Repo</label>
+        <input class="gh-input" id="gh-path" type="text" placeholder="index.html" autocomplete="off" autocorrect="off" spellcheck="false">
+        <div class="gh-hint">e.g. index.html or docs/index.html</div>
+      </div>
+      <div class="gh-field">
+        <label class="gh-label">Branch</label>
+        <input class="gh-input" id="gh-branch" type="text" placeholder="main" autocomplete="off" autocorrect="off" spellcheck="false">
+      </div>
+      <button class="gh-save" onclick="saveGhConfig()">Save &amp; Connect</button>
+    </div>
+  </div>
+
   <!-- BOTTOM NAV -->
   <nav id="bottom-nav">
     <button class="nav-tab active" onclick="go('home',this)"><span class="ni">🏠</span><span>Home</span></button>
@@ -3096,12 +3167,79 @@ function go(name, btn) {
 }
 
 // ── EXPORT / BACKUP ──────────────────────────────────────
-// ── BACKUP — generates a self-contained index.html with data embedded ──
-function exportBackup() {
-  const now = new Date();
-  const dateStr = now.toISOString().split('T')[0];
+// ── GITHUB CONFIG ────────────────────────────────────────
+function getGhConfig() {
+  return JSON.parse(localStorage.getItem('nos_gh_config') || 'null');
+}
 
-  // Collect all nos_ data from localStorage
+function saveGhConfig() {
+  const token  = document.getElementById('gh-token').value.trim();
+  const owner  = document.getElementById('gh-owner').value.trim();
+  const repo   = document.getElementById('gh-repo').value.trim();
+  const path   = document.getElementById('gh-path').value.trim() || 'index.html';
+  const branch = document.getElementById('gh-branch').value.trim() || 'main';
+  if (!token || !owner || !repo) { showToast('Fill in all required fields'); return; }
+  localStorage.setItem('nos_gh_config', JSON.stringify({ token, owner, repo, path, branch }));
+  closeGhModal();
+  updateBackupBtn();
+  showToast('✓ GitHub connected — tap Backup anytime');
+}
+
+function openGhModal() {
+  const cfg = getGhConfig();
+  if (cfg) {
+    document.getElementById('gh-token').value  = cfg.token;
+    document.getElementById('gh-owner').value  = cfg.owner;
+    document.getElementById('gh-repo').value   = cfg.repo;
+    document.getElementById('gh-path').value   = cfg.path;
+    document.getElementById('gh-branch').value = cfg.branch;
+  } else {
+    document.getElementById('gh-branch').value = 'main';
+    document.getElementById('gh-path').value   = 'index.html';
+  }
+  document.getElementById('gh-modal').classList.add('open');
+}
+
+function closeGhModal(e) {
+  if (e && e.target !== document.getElementById('gh-modal')) return;
+  document.getElementById('gh-modal').classList.remove('open');
+}
+
+function updateBackupBtn() {
+  const cfg = getGhConfig();
+  const icon  = document.getElementById('backup-btn-icon');
+  const label = document.getElementById('backup-btn-label');
+  if (!cfg) {
+    icon.textContent  = '⚙';
+    label.textContent = 'Setup';
+  } else {
+    icon.textContent  = '↑';
+    label.textContent = 'Backup';
+  }
+}
+
+// ── BACKUP TOAST ─────────────────────────────────────────
+let toastTimer = null;
+function showToast(msg, duration = 3000) {
+  const el = document.getElementById('backup-toast');
+  el.textContent = msg;
+  el.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => el.classList.remove('show'), duration);
+}
+
+// ── BACKUP — tap once, data pushed to GitHub automatically ──
+function handleBackupTap() {
+  const cfg = getGhConfig();
+  if (!cfg) { openGhModal(); return; }
+  exportBackup();
+}
+
+async function exportBackup() {
+  const cfg = getGhConfig();
+  if (!cfg) { openGhModal(); return; }
+
+  // Collect all nos_ data
   const data = {};
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
@@ -3111,41 +3249,61 @@ function exportBackup() {
     }
   }
 
-  // Embed data into a copy of the current HTML
-  // Replace the bootstrap line so opening the file on any device auto-restores data
+  // Embed data into current HTML
   const currentHtml = document.documentElement.outerHTML;
-  const dataJson = JSON.stringify(data);
   const backupHtml = currentHtml.replace(
     'const DATA_BOOTSTRAP = null;',
-    `const DATA_BOOTSTRAP = ${dataJson};`
+    `const DATA_BOOTSTRAP = ${JSON.stringify(data)};`
   );
 
-  const filename = `nivedita-os-${dateStr}.html`;
-
-  const done = () => {
-    localStorage.setItem('nos_last_backup', dateStr);
-    dismissBackupPrompt();
+  const { token, owner, repo, path, branch } = cfg;
+  const apiBase = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+    'Accept': 'application/vnd.github+json',
+    'Content-Type': 'application/json'
   };
 
-  if (navigator.share) {
-    const file = new File([backupHtml], filename, { type: 'text/html' });
-    navigator.share({ files: [file], title: 'Nivedita OS — ' + dateStr })
-      .then(done)
-      .catch(() => fallbackDownload(backupHtml, filename));
-  } else {
-    fallbackDownload(backupHtml, filename);
-    done();
-  }
-}
+  showToast('Backing up…', 30000);
 
-function fallbackDownload(content, filename) {
-  const blob = new Blob([content], { type: 'text/html' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url; a.download = filename;
-  document.body.appendChild(a); a.click();
-  document.body.removeChild(a);
-  URL.revokeObjectURL(url);
+  try {
+    // 1. Get current file SHA (required by GitHub API to update a file)
+    let sha = null;
+    const getRes = await fetch(`${apiBase}?ref=${branch}`, { headers });
+    if (getRes.ok) {
+      const info = await getRes.json();
+      sha = info.sha;
+    } else if (getRes.status !== 404) {
+      throw new Error('GitHub error ' + getRes.status);
+    }
+
+    // 2. Push updated file
+    const now = new Date();
+    const dateStr = now.toISOString().split('T')[0];
+    const body = {
+      message: `backup: ${dateStr} ${now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`,
+      content: btoa(unescape(encodeURIComponent(backupHtml))),
+      branch
+    };
+    if (sha) body.sha = sha;
+
+    const putRes = await fetch(apiBase, {
+      method: 'PUT', headers, body: JSON.stringify(body)
+    });
+
+    if (!putRes.ok) {
+      const err = await putRes.json();
+      throw new Error(err.message || 'Push failed');
+    }
+
+    localStorage.setItem('nos_last_backup', dateStr);
+    dismissBackupPrompt();
+    showToast('✓ Backed up to GitHub');
+
+  } catch (err) {
+    showToast('✗ ' + err.message, 5000);
+    console.error('Backup error:', err);
+  }
 }
 
 function checkSundayBackup() {
@@ -3834,6 +3992,7 @@ function toggleGrow(hd) {
 // ── INIT ─────────────────────────────────────────────────
 restoreFromBootstrap(); // must run first — loads data before anything renders
 initGreeting();
+updateBackupBtn();
 initQuote();
 buildStreaks();
 buildUpcoming();
