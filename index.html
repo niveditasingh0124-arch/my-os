@@ -30,7 +30,7 @@
   --terra:       #C17F6B;
   --terra-light: #FBF0EC;
   /* Layout */
-  --bot-h:    40px;
+  --bot-h:    56px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bot: env(safe-area-inset-bottom, 0px);
 }
@@ -56,14 +56,14 @@ html, body {
   overflow-y: auto; -webkit-overflow-scrolling: touch;
   display: none;
   padding-top: var(--safe-top);
-  padding-bottom: calc(var(--bot-h) + var(--safe-bot) + 6px);
+  padding-bottom: calc(var(--bot-h) + 6px);
 }
 .tab-screen.active { display: block; }
 
 /* ── BOTTOM NAV ────────────────────────────── */
 #bottom-nav {
   flex-shrink: 0;
-  height: calc(var(--bot-h) + var(--safe-bot));
+  height: var(--bot-h);
   background: rgba(250,248,245,0.97);
   backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
   border-top: 1px solid var(--border);
@@ -126,7 +126,7 @@ html, body {
 
 /* Backup toast */
 #backup-toast {
-  position: fixed; bottom: calc(var(--bot-h) + var(--safe-bot) + 6px); left: 50%;
+  position: fixed; bottom: calc(var(--bot-h) + 6px); left: 50%;
   transform: translateX(-50%) translateY(20px);
   background: #2C2C2C; color: white; border-radius: 12px;
   padding: 10px 18px; font-size: 13px; font-family: -apple-system,Arial,sans-serif;
@@ -1043,7 +1043,7 @@ textarea.gm-input { height: 80px; }
 
 /* FAB */
 .fab {
-  position: fixed; bottom: calc(var(--bot-h) + var(--safe-bot) + 18px); right: 20px;
+  position: fixed; bottom: calc(var(--bot-h) + 18px); right: 20px;
   width: 52px; height: 52px; border-radius: 50%;
   background: var(--rose); color: white; border: none;
   font-size: 26px; cursor: pointer; z-index: 50;
