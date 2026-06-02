@@ -30,7 +30,7 @@
   --terra:       #C17F6B;
   --terra-light: #FBF0EC;
   /* Layout */
-  --bot-h:    60px;
+  --bot-h:    50px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bot: env(safe-area-inset-bottom, 0px);
 }
@@ -74,12 +74,12 @@ html, body {
 .nav-tab {
   flex: 1; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  gap: 3px; border: none; background: none; cursor: pointer;
+  gap: 2px; border: none; background: none; cursor: pointer;
   color: var(--muted); font-family: -apple-system, Arial, sans-serif;
-  font-size: 9px; padding: 6px 2px; transition: color 0.2s;
+  font-size: 9px; padding: 4px 2px; transition: color 0.2s;
   min-width: 0;
 }
-.nav-tab .ni { font-size: 19px; line-height: 1; transition: transform 0.2s; }
+.nav-tab .ni { font-size: 18px; line-height: 1; transition: transform 0.2s; }
 .nav-tab.active { color: var(--rose); }
 .nav-tab.active .ni { transform: translateY(-2px); }
 .nav-tab span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
@@ -95,7 +95,7 @@ html, body {
 
 /* ── HOME TAB ──────────────────────────────── */
 .home-top {
-  padding: calc(var(--safe-top) + 28px) 18px 20px;
+  padding: calc(var(--safe-top) + 12px) 18px 16px;
   display: flex; align-items: flex-start; justify-content: space-between;
 }
 .home-top-left { flex: 1; }
@@ -239,7 +239,7 @@ html, body {
 
 /* ── STARTUP TAB ───────────────────────────── */
 .startup-hero {
-  padding: calc(var(--safe-top) + 24px) 18px 20px;
+  padding: calc(var(--safe-top) + 10px) 18px 16px;
   background: linear-gradient(160deg, #1A1A1A 0%, #2C2410 100%);
 }
 .startup-tag { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: rgba(201,169,110,0.65); font-family: -apple-system,Arial,sans-serif; font-weight: 600; margin-bottom: 6px; }
@@ -702,7 +702,7 @@ textarea.mental-input { resize: none; height: 70px; line-height: 1.7; }
 
 /* ── TODAY TAB ─────────────────────────────── */
 .today-hero {
-  padding: calc(var(--safe-top) + 24px) 18px 18px;
+  padding: calc(var(--safe-top) + 10px) 18px 14px;
   background: linear-gradient(160deg, var(--rose-light) 0%, var(--gold-light) 100%);
 }
 .today-tag { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: var(--rose); font-family: -apple-system,Arial,sans-serif; font-weight: 700; margin-bottom: 6px; }
@@ -844,7 +844,7 @@ textarea.mental-input { resize: none; height: 70px; line-height: 1.7; }
 
 /* ── GOALS TAB ─────────────────────────────── */
 .goals-hero {
-  padding: calc(var(--safe-top) + 28px) 18px 20px;
+  padding: calc(var(--safe-top) + 12px) 18px 16px;
 }
 .goals-section {
   margin: 0 18px 20px;
@@ -939,7 +939,7 @@ textarea.gm-input { height: 80px; }
 
 /* ── CALENDAR TAB ──────────────────────────── */
 .cal-top {
-  padding: calc(var(--safe-top) + 20px) 18px 14px;
+  padding: calc(var(--safe-top) + 10px) 18px 12px;
   display: flex; align-items: center; justify-content: space-between;
 }
 .cal-nav { background: none; border: none; font-size: 22px; color: var(--muted); cursor: pointer; padding: 6px 10px; }
@@ -1070,7 +1070,7 @@ textarea.ev-input { resize: none; height: 90px; }
 
 /* ── LIFE TAB ──────────────────────────────── */
 .life-hero {
-  padding: calc(var(--safe-top) + 28px) 18px 20px;
+  padding: calc(var(--safe-top) + 12px) 18px 16px;
 }
 .life-section { padding: 0 18px 28px; }
 .life-section-title {
@@ -1186,7 +1186,7 @@ textarea.ev-input { resize: none; height: 90px; }
 
       <!-- Sunday backup prompt -->
       <div id="backup-prompt">
-        <p>It's Sunday — time for your weekly <strong>data backup.</strong></p>
+        <p>It's Sunday — tap to export a <strong>backup index.html</strong> with your data embedded. Commit it to GitHub to keep everything safe.</p>
         <div class="bp-btns">
           <button class="bp-do" onclick="exportBackup();dismissBackupPrompt()">Back up</button>
           <button class="bp-skip" onclick="dismissBackupPrompt()">✕</button>
@@ -1925,60 +1925,68 @@ textarea.ev-input { resize: none; height: 90px; }
   </div>
 
   <!-- GROW MODAL -->
-  <div id="grow-modal" style="position:fixed;inset:0;z-index:995;background:var(--ivory);transform:translateY(100%);transition:transform 0.38s cubic-bezier(0.32,0.72,0,1);overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:60px;">
+  <div id="grow-modal">
 
     <div style="position:sticky;top:0;z-index:10;background:rgba(250,248,245,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:calc(var(--safe-top) + 12px) 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
       <button onclick="closeGrow()" style="background:none;border:none;font-size:24px;color:var(--muted);cursor:pointer;padding:4px;line-height:1;flex-shrink:0;">‹</button>
-      <div style="font-size:16px;color:var(--text);flex:1;">Personal Development</div>
+      <div style="font-size:16px;color:var(--text);flex:1;">Grow — Personal Development</div>
     </div>
 
     <!-- Hero -->
     <div style="background:linear-gradient(160deg,#1A1A1A,#2C2410);padding:28px 20px 24px;">
-      <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:rgba(201,169,110,0.65);font-family:-apple-system,Arial,sans-serif;font-weight:600;margin-bottom:8px;">Jim Rohn</div>
-      <div style="font-size:28px;font-weight:300;color:white;margin-bottom:10px;">Grow</div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.55);font-family:-apple-system,Arial,sans-serif;font-style:italic;line-height:1.7;margin-bottom:16px;">"Success is something you attract by the person you become. Work on yourself more than you work on your job."</div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:rgba(201,169,110,0.65);font-family:-apple-system,Arial,sans-serif;font-weight:600;margin-bottom:8px;">Part IX — Jim Rohn</div>
+      <div style="font-size:28px;font-weight:300;color:white;margin-bottom:10px;">Personal Development</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.55);font-family:-apple-system,Arial,sans-serif;font-style:italic;line-height:1.7;margin-bottom:16px;">Structural principles for a founder building a life by design, not by drift.</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <span style="background:var(--gold);color:#1A1A1A;font-size:10px;font-family:-apple-system,Arial,sans-serif;font-weight:700;padding:4px 12px;border-radius:20px;">9 Principles</span>
         <span style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);font-size:10px;font-family:-apple-system,Arial,sans-serif;padding:4px 12px;border-radius:20px;">Tap each to expand</span>
       </div>
     </div>
 
+    <!-- Intro callout -->
+    <div style="margin:20px 18px 4px;background:var(--gold-light);border-left:4px solid var(--gold);border-radius:0 12px 12px 0;padding:14px 16px;">
+      <p style="font-size:13.5px;line-height:1.8;color:var(--text);font-style:italic;">"Success is something you attract, not something you pursue. You attract it by becoming the kind of person success is looking for. Work on yourself first."</p>
+    </div>
+
     <!-- Principles -->
-    <div style="padding:20px 18px 0;">
+    <div style="padding:16px 18px 0;">
 
       <!-- 1 -->
       <div class="gw-card">
-        <div class="gw-hd" onclick="toggleGrow(this)">
-          <div class="gw-hd-inner"><div class="gw-num">1</div><div class="gw-title">The Core Question — What Are You Becoming?</div></div>
+        <div class="gw-card-hd" onclick="toggleGrow(this)">
+          <div class="gw-num">1</div>
+          <div class="gw-card-title">The Core Question — What Are You Becoming?</div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-body">
+        <div class="gw-card-body">
           <p>The major question to ask is not what you are getting. It is <strong>what you are becoming.</strong> True happiness is not contained in what you get. It is contained in what you become.</p>
-          <p>This reframes everything — every practice, every hour spent on Designup. The ₹5 lakhs, the Forbes feature, the successful launch — those are byproducts. The goal is who you are becoming in the pursuit of them.</p>
+          <p>This reframes everything — every practice in this plan, every hour spent on Designup. The ₹5 lakhs, the Forbes feature, the successful launch — those are byproducts. The goal is who you are becoming in the pursuit of them.</p>
           <p>Success is something you attract, not something you pursue. You attract it by becoming the kind of person success is looking for. Personal development is not separate from your entrepreneurial ambition. It is the engine of it.</p>
         </div>
       </div>
 
       <!-- 2 -->
       <div class="gw-card">
-        <div class="gw-hd" onclick="toggleGrow(this)">
-          <div class="gw-hd-inner"><div class="gw-num">2</div><div class="gw-title">The Three Ways to Know — Read, Listen, Observe</div></div>
+        <div class="gw-card-hd" onclick="toggleGrow(this)">
+          <div class="gw-num">2</div>
+          <div class="gw-card-title">The Three Ways to Know — Read, Listen, Observe</div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-body">
+        <div class="gw-card-body">
           <p><strong>Read or listen actively — thirty minutes daily, no miss.</strong> You are primarily a listener. That works. The condition is non-negotiable: active engagement, notebook open, pause when something lands, write one line. Miss a meal before you miss your thirty minutes. Undernourished minds produce undernourished lives.</p>
           <p><strong>Listen to people who are ahead of you.</strong> Get around founders, builders, thinkers who are further along and listen more than you speak. One conversation with the right person can compress years.</p>
-          <p><strong>Observe.</strong> Success leaves clues. Watch how people who have built what you want to build carry themselves, make decisions, handle setbacks. Do not miss anything.</p>
+          <p><strong>Observe.</strong> Success leaves clues. Watch how people who have built what you want to build carry themselves, make decisions, handle setbacks. Wherever you are, be there fully. Do not miss anything.</p>
         </div>
       </div>
 
       <!-- 3 -->
       <div class="gw-card">
-        <div class="gw-hd" onclick="toggleGrow(this)">
-          <div class="gw-hd-inner"><div class="gw-num">3</div><div class="gw-title">From Learning to Massive Action</div></div>
+        <div class="gw-card-hd" onclick="toggleGrow(this)">
+          <div class="gw-num">3</div>
+          <div class="gw-card-title">From Learning to Massive Action</div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-body">
+        <div class="gw-card-body">
           <p>Do not let your learning lead only to knowledge. <strong>Knowledge without action produces nothing.</strong> Let your learning lead to action — and action leads to everything.</p>
           <p>The formula: pick up a good idea, take <strong>massive</strong> action. Massive is the key word. If you are going to reach customers, reach a thousand. Write your game plan on paper. Do not operate from your head — operate from paper.</p>
           <p>Do not try to beat the system. Find out how it works, then work it. Cutting corners produces a cut-down life. Do it right, even when it seems to take longer. Be a quick learner. Don't be stubborn.</p>
@@ -1987,11 +1995,12 @@ textarea.ev-input { resize: none; height: 90px; }
 
       <!-- 4 -->
       <div class="gw-card">
-        <div class="gw-hd" onclick="toggleGrow(this)">
-          <div class="gw-hd-inner"><div class="gw-num">4</div><div class="gw-title">The Law of Use — Use It or Lose It</div></div>
+        <div class="gw-card-hd" onclick="toggleGrow(this)">
+          <div class="gw-num">4</div>
+          <div class="gw-card-title">The Law of Use — Use It or Lose It</div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-body">
+        <div class="gw-card-body">
           <p>Whatever you do not use, you lose. This is not philosophy. <strong>It is law.</strong> Ambition unused declines. Vitality unused diminishes. Faith unused decreases. Talent unused is lost.</p>
           <p>Take a new inventory of yourself. Make sure that all of your talent, ability, mentality, ingenuity, vitality, courage, strong feelings, and faith are being used. The practices in this plan — the gym, the mirror work, the pranayam, the writing — are all acts of use. You are keeping the instrument alive.</p>
           <p>If you tie your arm to your body long enough, you will never use it again. The only way to keep it is to keep using it. Do not let any part of what you are capable of go unused.</p>
@@ -2000,69 +2009,72 @@ textarea.ev-input { resize: none; height: 90px; }
 
       <!-- 5 -->
       <div class="gw-card">
-        <div class="gw-hd" onclick="toggleGrow(this)">
-          <div class="gw-hd-inner"><div class="gw-num">5</div><div class="gw-title">The Law of Sowing and Reaping</div></div>
+        <div class="gw-card-hd" onclick="toggleGrow(this)">
+          <div class="gw-num">5</div>
+          <div class="gw-card-title">The Law of Sowing and Reaping</div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-body">
-          <p>Sow bad, reap bad. Sow good, reap good. <strong>You do not reap what you sow — you reap much more than what you sow.</strong> It works in both directions. If you do not sow at all, you do not even have a chance.</p>
+        <div class="gw-card-body">
+          <p>Sow bad, reap bad. Sow good, reap good. <strong>You do not reap what you sow — you reap much more than what you sow.</strong> It works in both directions. There are many ways to sow. You could sometimes lose — that is part of this planet. And if you do not sow at all, you do not even have a chance.</p>
           <p>The crop you have right now is the one you planted. If you do not like it, look in the mirror. Then change what you are planting.</p>
-          <p>The daily practices are sowing acts. Designup's MVP launch is a sowing act. Plant well, plant massively, and trust the law. The harvest comes — but only after the planting.</p>
+          <p>The daily practices are sowing acts. Designup's launch is a sowing act. Plant well, plant massively, and trust the law. The harvest comes — but only after the planting.</p>
         </div>
       </div>
 
       <!-- 6 -->
       <div class="gw-card">
-        <div class="gw-hd" onclick="toggleGrow(this)">
-          <div class="gw-hd-inner"><div class="gw-num">6</div><div class="gw-title">Goals — Designed, Not Drifted</div></div>
+        <div class="gw-card-hd" onclick="toggleGrow(this)">
+          <div class="gw-num">6</div>
+          <div class="gw-card-title">Goals — Designed, Not Drifted</div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-body">
+        <div class="gw-card-body">
           <p>It is easy to let life deteriorate into <strong>making a living instead of designing a life.</strong> You have chosen to design. Now make that design precise.</p>
           <p><strong>Reasons first.</strong> If you have enough reasons, you can do the most incredible things. Get a long list — personal reasons, family reasons, the feeling of being a winner, the people you want to serve through Designup, the woman you are becoming.</p>
-          <p><strong>Long-range goals:</strong> Forbes 30 Under 30. ₹5 lakhs a month. The sovereign founder. Keep these alive. Without dreams, direction disappears.</p>
-          <p><strong>Short-range goals — three categories:</strong> economic (income, Designup growth), things (what you want to acquire and experience), personal development (who you want to become). Write them down. Work them. Your goals affect everything — how you walk into a room, how you answer a question. Set worthy goals and everything lifts.</p>
+          <p><strong>Long-range goals:</strong> Forbes 30 Under 30. ₹5 lakhs a month. The artist. The sovereign founder. Keep these alive. Without dreams, direction disappears.</p>
+          <p><strong>Short-range goals — three categories:</strong> economic (income, Designup growth), things (what you want to acquire and experience), personal development (who you want to become). <strong>Write them down. Work them.</strong> Your goals affect everything — how you walk into a room, how you answer a question. Set worthy goals and everything lifts.</p>
         </div>
       </div>
 
       <!-- 7 -->
       <div class="gw-card">
-        <div class="gw-hd" onclick="toggleGrow(this)">
-          <div class="gw-hd-inner"><div class="gw-num">7</div><div class="gw-title">Attitude Diseases — The Ones to Watch</div></div>
+        <div class="gw-card-hd" onclick="toggleGrow(this)">
+          <div class="gw-num">7</div>
+          <div class="gw-card-title">Attitude Diseases — The Ones to Watch</div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-body">
-          <p>These are weeds. They grow normally. Neglect them for a week and they cost you a year of repair.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
-            <div style="background:#FFF5F5;border-radius:12px;padding:12px;border:1px solid #F5C6C6;">
+        <div class="gw-card-body">
+          <p>These are weeds. They grow normally. The work is not to be surprised when they appear but to handle them immediately. Neglect them for a week and they cost you a year of repair.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px;">
+            <div style="background:#FFF5F5;border-radius:10px;padding:12px;border:1px solid var(--border);border-top:3px solid #C0392B;">
               <div style="font-size:12px;font-weight:700;color:#C0392B;font-family:-apple-system,Arial,sans-serif;margin-bottom:4px;">Indifference</div>
-              <div style="font-size:11.5px;color:#3A4A5C;line-height:1.55;font-family:-apple-system,Arial,sans-serif;">The shrug. Creeps in during long stretches of solo building.</div>
-              <div style="font-size:11px;color:var(--sage);margin-top:5px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: bring everything to every action.</div>
+              <div style="font-size:11.5px;color:#3A4A5C;line-height:1.55;font-family:-apple-system,Arial,sans-serif;">The shrug. No strong feeling. Creeps in during long stretches of solo building.</div>
+              <div style="font-size:11px;color:var(--sage);margin-top:4px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: bring everything you have to every action.</div>
             </div>
-            <div style="background:#FFF5F5;border-radius:12px;padding:12px;border:1px solid #F5C6C6;">
+            <div style="background:#FFF5F5;border-radius:10px;padding:12px;border:1px solid var(--border);border-top:3px solid #C0392B;">
               <div style="font-size:12px;font-weight:700;color:#C0392B;font-family:-apple-system,Arial,sans-serif;margin-bottom:4px;">Self-Doubt</div>
               <div style="font-size:11.5px;color:#3A4A5C;line-height:1.55;font-family:-apple-system,Arial,sans-serif;">Chronic questioning of whether you can do it. Devastates the future.</div>
-              <div style="font-size:11px;color:var(--sage);margin-top:5px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: become a believer in yourself.</div>
+              <div style="font-size:11px;color:var(--sage);margin-top:4px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: become a believer — in the work, in yourself.</div>
             </div>
-            <div style="background:#FFF5F5;border-radius:12px;padding:12px;border:1px solid #F5C6C6;">
+            <div style="background:#FFF5F5;border-radius:10px;padding:12px;border:1px solid var(--border);border-top:3px solid #C0392B;">
               <div style="font-size:12px;font-weight:700;color:#C0392B;font-family:-apple-system,Arial,sans-serif;margin-bottom:4px;">Worry</div>
               <div style="font-size:11.5px;color:#3A4A5C;line-height:1.55;font-family:-apple-system,Arial,sans-serif;">Devastating. Health problems, focus problems, creative problems.</div>
-              <div style="font-size:11px;color:var(--sage);margin-top:5px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: evening brain dump. Give worry nowhere to live.</div>
+              <div style="font-size:11px;color:var(--sage);margin-top:4px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: evening brain dump. Give worry nowhere to live.</div>
             </div>
-            <div style="background:#FFF5F5;border-radius:12px;padding:12px;border:1px solid #F5C6C6;">
+            <div style="background:#FFF5F5;border-radius:10px;padding:12px;border:1px solid var(--border);border-top:3px solid #C0392B;">
               <div style="font-size:12px;font-weight:700;color:#C0392B;font-family:-apple-system,Arial,sans-serif;margin-bottom:4px;">Over-Caution</div>
-              <div style="font-size:11.5px;color:#3A4A5C;line-height:1.55;font-family:-apple-system,Arial,sans-serif;">Waiting until it is safe. Get the bill for not trying.</div>
-              <div style="font-size:11px;color:var(--sage);margin-top:5px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: ask for adventure, not security.</div>
+              <div style="font-size:11.5px;color:#3A4A5C;line-height:1.55;font-family:-apple-system,Arial,sans-serif;">Waiting until it is safe. If trying is risky, wait until you get the bill for not trying.</div>
+              <div style="font-size:11px;color:var(--sage);margin-top:4px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: ask for adventure, not security.</div>
             </div>
-            <div style="background:#FFF5F5;border-radius:12px;padding:12px;border:1px solid #F5C6C6;">
+            <div style="background:#FFF5F5;border-radius:10px;padding:12px;border:1px solid var(--border);border-top:3px solid #C0392B;">
               <div style="font-size:12px;font-weight:700;color:#C0392B;font-family:-apple-system,Arial,sans-serif;margin-bottom:4px;">Pessimism</div>
               <div style="font-size:11.5px;color:#3A4A5C;line-height:1.55;font-family:-apple-system,Arial,sans-serif;">Always checking what is wrong. Our lives are mostly affected by the way we think things are.</div>
-              <div style="font-size:11px;color:var(--sage);margin-top:5px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: train the mind to look for what is right.</div>
+              <div style="font-size:11px;color:var(--sage);margin-top:4px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: train the mind to look for what is right.</div>
             </div>
-            <div style="background:#FFF5F5;border-radius:12px;padding:12px;border:1px solid #F5C6C6;">
+            <div style="background:#FFF5F5;border-radius:10px;padding:12px;border:1px solid var(--border);border-top:3px solid #C0392B;">
               <div style="font-size:12px;font-weight:700;color:#C0392B;font-family:-apple-system,Arial,sans-serif;margin-bottom:4px;">Complaining</div>
               <div style="font-size:11.5px;color:#3A4A5C;line-height:1.55;font-family:-apple-system,Arial,sans-serif;">Five minutes of complaining wastes five minutes and plants seeds of worse.</div>
-              <div style="font-size:11px;color:var(--sage);margin-top:5px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: don't. Not for five minutes.</div>
+              <div style="font-size:11px;color:var(--sage);margin-top:4px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: don't. Not for five minutes.</div>
             </div>
           </div>
         </div>
@@ -2070,27 +2082,28 @@ textarea.ev-input { resize: none; height: 90px; }
 
       <!-- 8 -->
       <div class="gw-card">
-        <div class="gw-hd" onclick="toggleGrow(this)">
-          <div class="gw-hd-inner"><div class="gw-num">8</div><div class="gw-title">The Four Emotions That Turn a Life Around</div></div>
+        <div class="gw-card-hd" onclick="toggleGrow(this)">
+          <div class="gw-num">8</div>
+          <div class="gw-card-title">The Four Emotions That Turn a Life Around</div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-body">
+        <div class="gw-card-body">
           <p>These are not techniques. They are emotional states that, when they arrive genuinely, produce irreversible change.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
-            <div style="background:var(--gold-light);border-radius:12px;padding:14px;border:1px solid #E8D099;text-align:center;">
-              <div style="font-size:22px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:5px;">Disgust</div>
-              <div style="font-size:12px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">"I have had it." May not be the day it ends, but the day it begins.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px;">
+            <div style="background:var(--gold-light);border-radius:10px;padding:13px;border:1px solid var(--border);border-top:3px solid var(--gold);text-align:center;">
+              <div style="font-size:18px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:5px;">Disgust</div>
+              <div style="font-size:12px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">"I have had it." May not be the day it ends, but the day it begins. You have had this day already. Remember it as evidence.</div>
             </div>
-            <div style="background:var(--gold-light);border-radius:12px;padding:14px;border:1px solid #E8D099;text-align:center;">
-              <div style="font-size:22px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:5px;">Decision</div>
-              <div style="font-size:12px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">The inner civil war resolved. When you have decided, act. Easy or hard — get it done.</div>
+            <div style="background:var(--gold-light);border-radius:10px;padding:13px;border:1px solid var(--border);border-top:3px solid var(--gold);text-align:center;">
+              <div style="font-size:18px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:5px;">Decision</div>
+              <div style="font-size:12px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">The inner civil war resolved. When you have decided, act. Easy or hard — just get it done.</div>
             </div>
-            <div style="background:var(--gold-light);border-radius:12px;padding:14px;border:1px solid #E8D099;text-align:center;">
-              <div style="font-size:22px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:5px;">Desire</div>
+            <div style="background:var(--gold-light);border-radius:10px;padding:13px;border:1px solid var(--border);border-top:3px solid var(--gold);text-align:center;">
+              <div style="font-size:18px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:5px;">Desire</div>
               <div style="font-size:12px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">Wanting it badly enough. Comes from inside, not outside. Keep the barriers down.</div>
             </div>
-            <div style="background:var(--gold-light);border-radius:12px;padding:14px;border:1px solid #E8D099;text-align:center;">
-              <div style="font-size:22px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:5px;">Resolve</div>
+            <div style="background:var(--gold-light);border-radius:10px;padding:13px;border:1px solid var(--border);border-top:3px solid var(--gold);text-align:center;">
+              <div style="font-size:18px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:5px;">Resolve</div>
               <div style="font-size:12px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">"I will." Two of the most powerful words. You are your mountain and you intend to wave from the top.</div>
             </div>
           </div>
@@ -2098,28 +2111,29 @@ textarea.ev-input { resize: none; height: 90px; }
       </div>
 
       <!-- 9 -->
-      <div class="gw-card" style="margin-bottom:0;">
-        <div class="gw-hd" onclick="toggleGrow(this)">
-          <div class="gw-hd-inner"><div class="gw-num">9</div><div class="gw-title">Four Questions to Live With</div></div>
+      <div class="gw-card" style="margin-bottom:20px;">
+        <div class="gw-card-hd" onclick="toggleGrow(this)">
+          <div class="gw-num">9</div>
+          <div class="gw-card-title">Four Questions to Live With</div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-body">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
-            <div style="background:var(--rose-light);border-radius:12px;padding:16px 12px;text-align:center;border:1px solid var(--border);">
-              <div style="font-size:24px;color:var(--rose);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:6px;">Why?</div>
-              <div style="font-size:11.5px;color:#3A3330;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">Why try? Why read? Why build? Why go that far? Find your reasons. They change everything.</div>
+        <div class="gw-card-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
+            <div style="background:var(--gold-light);border-radius:10px;padding:15px 12px;text-align:center;border:1px solid #E8D5A0;">
+              <div style="font-size:22px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:6px;">Why?</div>
+              <p style="font-size:11px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">Why try? Why read? Why build? Why go that far? Find your reasons. They change everything.</p>
             </div>
-            <div style="background:var(--rose-light);border-radius:12px;padding:16px 12px;text-align:center;border:1px solid var(--border);">
-              <div style="font-size:24px;color:var(--rose);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:6px;">Why not?</div>
-              <div style="font-size:11.5px;color:#3A3330;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">What else are you going to do with your life? Why not see how far you can go?</div>
+            <div style="background:var(--gold-light);border-radius:10px;padding:15px 12px;text-align:center;border:1px solid #E8D5A0;">
+              <div style="font-size:22px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:6px;">Why not?</div>
+              <p style="font-size:11px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">What else are you going to do with your life? Why not see how far you can go?</p>
             </div>
-            <div style="background:var(--rose-light);border-radius:12px;padding:16px 12px;text-align:center;border:1px solid var(--border);">
-              <div style="font-size:24px;color:var(--rose);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:6px;">Why not you?</div>
-              <div style="font-size:11.5px;color:#3A3330;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">Some people have done the most incredible things with the most limited starts. Why not you?</div>
+            <div style="background:var(--gold-light);border-radius:10px;padding:15px 12px;text-align:center;border:1px solid #E8D5A0;">
+              <div style="font-size:22px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:6px;">Why not you?</div>
+              <p style="font-size:11px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">Some people have done the most incredible things with the most limited starts. Why not you?</p>
             </div>
-            <div style="background:var(--rose-light);border-radius:12px;padding:16px 12px;text-align:center;border:1px solid var(--border);">
-              <div style="font-size:24px;color:var(--rose);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:6px;">Why not now?</div>
-              <div style="font-size:11.5px;color:#3A3330;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">Do not postpone the better future. New goals. Massive action. The MVP is launching now.</div>
+            <div style="background:var(--gold-light);border-radius:10px;padding:15px 12px;text-align:center;border:1px solid #E8D5A0;">
+              <div style="font-size:22px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:6px;">Why not now?</div>
+              <p style="font-size:11px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">Do not postpone the better future. New goals. Massive action. The time is now.</p>
             </div>
           </div>
         </div>
@@ -2406,6 +2420,9 @@ textarea.ev-input { resize: none; height: 90px; }
 
 </div>
 <script>
+
+// ── DATA BOOTSTRAP (replaced during backup) ──────────────
+const DATA_BOOTSTRAP = null;
 
 // ── QUOTES ───────────────────────────────────────────────
 const Q = [
@@ -3079,118 +3096,78 @@ function go(name, btn) {
 }
 
 // ── EXPORT / BACKUP ──────────────────────────────────────
+// ── BACKUP — generates a self-contained index.html with data embedded ──
 function exportBackup() {
   const now = new Date();
   const dateStr = now.toISOString().split('T')[0];
-  const timeStr = now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
 
-  // Gather all nos_ keys from localStorage
-  const backup = { exported: now.toISOString(), version: '1.0', data: {} };
+  // Collect all nos_ data from localStorage
+  const data = {};
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
     if (key && key.startsWith('nos_')) {
-      try { backup.data[key] = JSON.parse(localStorage.getItem(key)); }
-      catch(e) { backup.data[key] = localStorage.getItem(key); }
+      try { data[key] = JSON.parse(localStorage.getItem(key)); }
+      catch(e) { data[key] = localStorage.getItem(key); }
     }
   }
 
-  // Human-readable summary
-  const goals = backup.data.nos_goals || {};
-  const events = backup.data.nos_calendar || [];
-  const thoughts = backup.data.nos_thoughts || [];
-  const streaks = {
-    skin:    (backup.data.nos_s_skin    || {}).count || 0,
-    morning: (backup.data.nos_s_morning || {}).count || 0,
-    voice:   (backup.data.nos_s_voice   || {}).count || 0,
-    listen:  (backup.data.nos_s_listen  || {}).count || 0,
+  // Embed data into a copy of the current HTML
+  // Replace the bootstrap line so opening the file on any device auto-restores data
+  const currentHtml = document.documentElement.outerHTML;
+  const dataJson = JSON.stringify(data);
+  const backupHtml = currentHtml.replace(
+    'const DATA_BOOTSTRAP = null;',
+    `const DATA_BOOTSTRAP = ${dataJson};`
+  );
+
+  const filename = `nivedita-os-${dateStr}.html`;
+
+  const done = () => {
+    localStorage.setItem('nos_last_backup', dateStr);
+    dismissBackupPrompt();
   };
 
-  const readable = `NIVEDITA — PERSONAL OS BACKUP
-Exported: ${dateStr} at ${timeStr}
-${'─'.repeat(40)}
-
-STREAKS
-No Skin Picking:  ${streaks.skin} days
-Morning Ritual:   ${streaks.morning} days
-Voice Practice:   ${streaks.voice} days
-Listening:        ${streaks.listen} days
-
-CAREER & LEGACY
-1 Year Vision:    ${goals.career_1yr || '—'}
-3 Year Vision:    ${goals.career_3yr || '—'}
-5 Year Vision:    ${goals.career_5yr || '—'}
-Legacy:           ${goals.legacy || '—'}
-This Month:       ${goals.month_focus || '—'}
-
-FINANCIAL
-Earning Target:   ${goals.fin_earn_target || '—'}
-Current Month:    ${goals.fin_current || '—'}
-Savings Target:   ${goals.fin_savings || '—'}
-Next Milestone:   ${goals.fin_milestone || '—'}
-
-PERSONAL GOALS
-1: ${goals.personal_1 || '—'}
-2: ${goals.personal_2 || '—'}
-3: ${goals.personal_3 || '—'}
-Personality Focus: ${goals.personality_focus || '—'}
-Discipline Focus:  ${goals.discipline_focus || '—'}
-
-HEALTH GOALS
-Skin:    ${goals.health_skin || '—'}
-Gut:     ${goals.health_gut || '—'}
-Fitness: ${goals.health_fitness || '—'}
-Sleep:   ${goals.health_sleep || '—'}
-
-CALENDAR (${events.length} events)
-${events.sort((a,b)=>a.date>b.date?1:-1).map(e=>`${e.date}${e.time?' '+e.time:''} [${e.cat}] ${e.title}${e.notes?' — '+e.notes:''}`).join('\n') || '— No events'}
-
-THOUGHTS & CAPTURES (${thoughts.length})
-${thoughts.map(t=>`[${t.created.split('T')[0]}]${t.taggedDate?' → '+t.taggedDate:''} ${t.text}`).join('\n') || '— None'}
-
-${'─'.repeat(40)}
-Full JSON backup also included below.
-${'─'.repeat(40)}
-
-${JSON.stringify(backup, null, 2)}`;
-
-  const filename = `nivedita-os-${dateStr}.txt`;
-
-  // iOS native share (best on iPhone)
   if (navigator.share) {
-    const file = new File([readable], filename, {type:'text/plain'});
-    navigator.share({files:[file], title:'Nivedita OS Backup — '+dateStr})
-      .then(() => {
-        localStorage.setItem('nos_last_backup', dateStr);
-        dismissBackupPrompt();
-      })
-      .catch(() => fallbackDownload(readable, filename));
+    const file = new File([backupHtml], filename, { type: 'text/html' });
+    navigator.share({ files: [file], title: 'Nivedita OS — ' + dateStr })
+      .then(done)
+      .catch(() => fallbackDownload(backupHtml, filename));
   } else {
-    fallbackDownload(readable, filename);
+    fallbackDownload(backupHtml, filename);
+    done();
   }
 }
 
 function fallbackDownload(content, filename) {
-  const blob = new Blob([content], {type:'text/plain'});
+  const blob = new Blob([content], { type: 'text/html' });
   const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
   a.href = url; a.download = filename;
   document.body.appendChild(a); a.click();
   document.body.removeChild(a);
   URL.revokeObjectURL(url);
-  localStorage.setItem('nos_last_backup', new Date().toISOString().split('T')[0]);
 }
 
 function checkSundayBackup() {
   const today = new Date();
-  if (today.getDay() !== 0) return; // not Sunday
+  if (today.getDay() !== 0) return;
   const lastBackup = localStorage.getItem('nos_last_backup');
-  const thisWeekSunday = today.toISOString().split('T')[0];
-  if (lastBackup === thisWeekSunday) return; // already backed up today
+  if (lastBackup === today.toISOString().split('T')[0]) return;
   document.getElementById('backup-prompt').style.display = 'flex';
 }
 
 function dismissBackupPrompt() {
   document.getElementById('backup-prompt').style.display = 'none';
+}
+
+// ── RESTORE from bootstrap (runs once on fresh device/browser) ──
+function restoreFromBootstrap() {
+  if (!DATA_BOOTSTRAP) return;
+  const hasData = Object.keys(localStorage).some(k => k.startsWith('nos_'));
+  if (hasData) return; // don't overwrite existing data
+  Object.entries(DATA_BOOTSTRAP).forEach(([key, val]) => {
+    localStorage.setItem(key, typeof val === 'string' ? val : JSON.stringify(val));
+  });
 }
 
 // ── THOUGHTS / QUICK CAPTURE ─────────────────────────────
@@ -3835,7 +3812,27 @@ function closeQuality() {
   document.getElementById('q-modal').classList.remove('open');
 }
 
+// ── GROW MODAL ───────────────────────────────────────
+function openGrow() {
+  const m = document.getElementById('grow-modal');
+  m.scrollTop = 0;
+  m.querySelectorAll('.gw-card-body').forEach(b => b.classList.add('open'));
+  m.querySelectorAll('.gw-arr').forEach(a => a.classList.add('open'));
+  m.classList.add('open');
+}
+function closeGrow() {
+  document.getElementById('grow-modal').classList.remove('open');
+}
+function toggleGrow(hd) {
+  const body = hd.nextElementSibling;
+  const arr  = hd.querySelector('.gw-arr');
+  const open = body.classList.contains('open');
+  body.classList.toggle('open', !open);
+  arr.classList.toggle('open', !open);
+}
+
 // ── INIT ─────────────────────────────────────────────────
+restoreFromBootstrap(); // must run first — loads data before anything renders
 initGreeting();
 initQuote();
 buildStreaks();
