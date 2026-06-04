@@ -6,7 +6,12 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Nivedita OS">
+<meta name="theme-color" content="#C4847A">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>Nivedita — Personal OS</title>
+<!-- OneSignal PWA Push SDK -->
+<script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer></script>
 <style>
 :root {
   --ivory:   #FAF8F5;
@@ -30,7 +35,7 @@
   --terra:       #C17F6B;
   --terra-light: #FBF0EC;
   /* Layout */
-  --bot-h:    56px;
+  --bot-h:    60px;
   --safe-top: env(safe-area-inset-top, 0px);
   --safe-bot: env(safe-area-inset-bottom, 0px);
 }
@@ -55,14 +60,15 @@ html, body {
   position: absolute; inset: 0;
   overflow-y: auto; -webkit-overflow-scrolling: touch;
   display: none;
-  padding-bottom: calc(var(--bot-h) + 6px);
+  padding-top: var(--safe-top);
+  padding-bottom: calc(var(--bot-h) + var(--safe-bot) + 16px);
 }
 .tab-screen.active { display: block; }
 
 /* ── BOTTOM NAV ────────────────────────────── */
 #bottom-nav {
   flex-shrink: 0;
-  height: var(--bot-h);
+  height: calc(var(--bot-h) + var(--safe-bot));
   background: rgba(250,248,245,0.97);
   backdrop-filter: blur(24px); -webkit-backdrop-filter: blur(24px);
   border-top: 1px solid var(--border);
@@ -73,12 +79,12 @@ html, body {
 .nav-tab {
   flex: 1; display: flex; flex-direction: column;
   align-items: center; justify-content: center;
-  gap: 1px; border: none; background: none; cursor: pointer;
+  gap: 3px; border: none; background: none; cursor: pointer;
   color: var(--muted); font-family: -apple-system, Arial, sans-serif;
-  font-size: 9px; padding: 0; transition: color 0.2s;
+  font-size: 9px; padding: 6px 2px; transition: color 0.2s;
   min-width: 0;
 }
-.nav-tab .ni { font-size: 20px; line-height: 1; transition: transform 0.2s; }
+.nav-tab .ni { font-size: 19px; line-height: 1; transition: transform 0.2s; }
 .nav-tab.active { color: var(--rose); }
 .nav-tab.active .ni { transform: translateY(-2px); }
 .nav-tab span:last-child { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; }
@@ -94,7 +100,7 @@ html, body {
 
 /* ── HOME TAB ──────────────────────────────── */
 .home-top {
-  padding: var(--safe-top) 18px 16px;
+  padding: calc(var(--safe-top) + 28px) 18px 20px;
   display: flex; align-items: flex-start; justify-content: space-between;
 }
 .home-top-left { flex: 1; }
@@ -122,43 +128,6 @@ html, body {
 .bp-btns { display: flex; gap: 8px; flex-shrink: 0; }
 .bp-do { background: var(--gold); color: white; border: none; border-radius: 10px; padding: 7px 14px; font-size: 12px; font-family: -apple-system,Arial,sans-serif; font-weight: 600; cursor: pointer; }
 .bp-skip { background: none; border: none; color: var(--muted); font-size: 18px; cursor: pointer; padding: 2px; }
-
-/* Backup toast */
-#backup-toast {
-  position: fixed; bottom: calc(var(--bot-h) + 6px); left: 50%;
-  transform: translateX(-50%) translateY(20px);
-  background: #2C2C2C; color: white; border-radius: 12px;
-  padding: 10px 18px; font-size: 13px; font-family: -apple-system,Arial,sans-serif;
-  opacity: 0; transition: opacity 0.25s, transform 0.25s; z-index: 9999;
-  white-space: nowrap; pointer-events: none;
-}
-#backup-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
-/* GitHub setup modal */
-#gh-modal {
-  position: fixed; inset: 0; z-index: 1000;
-  background: rgba(0,0,0,0.5);
-  display: none; align-items: flex-end;
-}
-#gh-modal.open { display: flex; }
-.gh-box {
-  width: 100%; background: var(--ivory);
-  border-radius: 20px 20px 0 0;
-  padding: 24px 18px calc(var(--safe-bot) + 24px);
-}
-.gh-title { font-size: 16px; color: var(--text); font-weight: 400; margin-bottom: 4px; }
-.gh-sub { font-size: 12px; color: var(--muted); font-family: -apple-system,Arial,sans-serif; margin-bottom: 18px; line-height: 1.6; }
-.gh-field { margin-bottom: 14px; }
-.gh-label { font-size: 9.5px; text-transform: uppercase; letter-spacing: 1.5px; color: var(--muted); font-family: -apple-system,Arial,sans-serif; font-weight: 600; margin-bottom: 6px; display: block; }
-.gh-input {
-  width: 100%; background: var(--card); border: 1.5px solid var(--border);
-  border-radius: 12px; padding: 12px 14px; font-size: 14px; color: var(--text);
-  font-family: -apple-system,Arial,sans-serif; outline: none; -webkit-appearance: none;
-}
-.gh-input:focus { border-color: var(--gold); }
-.gh-hint { font-size: 11px; color: var(--muted); font-family: -apple-system,Arial,sans-serif; margin-top: 4px; font-style: italic; }
-.gh-save { width: 100%; background: var(--gold); color: white; border: none; border-radius: 14px; padding: 14px; font-size: 15px; font-weight: 600; font-family: -apple-system,Arial,sans-serif; cursor: pointer; margin-top: 4px; }
-.gh-save:active { opacity: 0.9; }
 .h-time { font-size: 10px; text-transform: uppercase; letter-spacing: 2px; color: var(--rose); font-family: -apple-system, Arial, sans-serif; font-weight: 600; margin-bottom: 6px; }
 .h-name { font-size: 30px; font-weight: 300; color: var(--text); letter-spacing: -0.5px; line-height: 1.1; }
 .h-name span { color: var(--rose); }
@@ -215,7 +184,7 @@ html, body {
   position: sticky; top: 0; z-index: 10;
   background: rgba(15,13,10,0.97);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  padding: var(--safe-top) 18px 12px;
+  padding: calc(var(--safe-top) + 12px) 18px 12px;
   border-bottom: 1px solid rgba(201,169,110,0.2);
   display: flex; align-items: center; gap: 12px;
 }
@@ -275,7 +244,7 @@ html, body {
 
 /* ── STARTUP TAB ───────────────────────────── */
 .startup-hero {
-  padding: var(--safe-top) 18px 16px;
+  padding: calc(var(--safe-top) + 24px) 18px 20px;
   background: linear-gradient(160deg, #1A1A1A 0%, #2C2410 100%);
 }
 .startup-tag { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: rgba(201,169,110,0.65); font-family: -apple-system,Arial,sans-serif; font-weight: 600; margin-bottom: 6px; }
@@ -408,16 +377,16 @@ html, body {
 
 /* PWA banner */
 #pwa-banner {
-  margin: 0 18px 14px;
-  background: linear-gradient(135deg, #1A1A1A, #2C2410);
-  border: 1px solid var(--gold);
+  margin: 16px 18px 4px;
+  background: var(--gold-light);
+  border: 1px solid #E8D099;
   border-radius: 14px;
   padding: 13px 14px;
-  display: none; align-items: flex-start; gap: 10px;
+  display: flex; align-items: flex-start; gap: 10px;
 }
-#pwa-banner p { font-size: 12px; color: rgba(255,255,255,0.85); line-height: 1.6; flex: 1; font-family: -apple-system, Arial, sans-serif; }
+#pwa-banner p { font-size: 12px; color: var(--text); line-height: 1.6; flex: 1; font-family: -apple-system, Arial, sans-serif; }
 #pwa-banner strong { color: var(--gold); }
-#pwa-close { background: none; border: none; color: rgba(255,255,255,0.4); font-size: 17px; cursor: pointer; flex-shrink: 0; padding: 2px; line-height: 1; }
+#pwa-close { background: none; border: none; color: var(--muted); font-size: 17px; cursor: pointer; flex-shrink: 0; padding: 2px; line-height: 1; }
 
 /* ── FORBES BADGE ──────────────────────────── */
 .forbes-banner {
@@ -511,7 +480,7 @@ html, body {
   position: sticky; top: 0; z-index: 10;
   background: rgba(250,248,245,0.97);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  padding: var(--safe-top) 18px 12px;
+  padding: calc(var(--safe-top) + 12px) 18px 12px;
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; gap: 12px;
 }
@@ -573,7 +542,7 @@ html, body {
   position: sticky; top: 0; z-index: 10;
   background: rgba(250,248,245,0.97);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  padding: var(--safe-top) 18px 12px;
+  padding: calc(var(--safe-top) + 12px) 18px 12px;
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; gap: 12px;
 }
@@ -738,7 +707,7 @@ textarea.mental-input { resize: none; height: 70px; line-height: 1.7; }
 
 /* ── TODAY TAB ─────────────────────────────── */
 .today-hero {
-  padding: var(--safe-top) 18px 14px;
+  padding: calc(var(--safe-top) + 24px) 18px 18px;
   background: linear-gradient(160deg, var(--rose-light) 0%, var(--gold-light) 100%);
 }
 .today-tag { font-size: 9px; text-transform: uppercase; letter-spacing: 2px; color: var(--rose); font-family: -apple-system,Arial,sans-serif; font-weight: 700; margin-bottom: 6px; }
@@ -880,7 +849,7 @@ textarea.mental-input { resize: none; height: 70px; line-height: 1.7; }
 
 /* ── GOALS TAB ─────────────────────────────── */
 .goals-hero {
-  padding: var(--safe-top) 18px 16px;
+  padding: calc(var(--safe-top) + 28px) 18px 20px;
 }
 .goals-section {
   margin: 0 18px 20px;
@@ -953,7 +922,7 @@ textarea.mental-input { resize: none; height: 70px; line-height: 1.7; }
   position: sticky; top: 0; z-index: 10;
   background: rgba(250,248,245,0.97);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  padding: var(--safe-top) 18px 14px;
+  padding: calc(var(--safe-top) + 14px) 18px 14px;
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
 }
@@ -975,7 +944,7 @@ textarea.gm-input { height: 80px; }
 
 /* ── CALENDAR TAB ──────────────────────────── */
 .cal-top {
-  padding: var(--safe-top) 18px 12px;
+  padding: calc(var(--safe-top) + 20px) 18px 14px;
   display: flex; align-items: center; justify-content: space-between;
 }
 .cal-nav { background: none; border: none; font-size: 22px; color: var(--muted); cursor: pointer; padding: 6px 10px; }
@@ -1042,7 +1011,7 @@ textarea.gm-input { height: 80px; }
 
 /* FAB */
 .fab {
-  position: fixed; bottom: calc(var(--bot-h) + 18px); right: 20px;
+  position: fixed; bottom: calc(var(--bot-h) + var(--safe-bot) + 18px); right: 20px;
   width: 52px; height: 52px; border-radius: 50%;
   background: var(--rose); color: white; border: none;
   font-size: 26px; cursor: pointer; z-index: 50;
@@ -1068,7 +1037,7 @@ textarea.gm-input { height: 80px; }
   position: sticky; top: 0; z-index: 10;
   background: rgba(250,248,245,0.97);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  padding: var(--safe-top) 18px 14px;
+  padding: calc(var(--safe-top) + 14px) 18px 14px;
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; justify-content: space-between;
 }
@@ -1106,7 +1075,7 @@ textarea.ev-input { resize: none; height: 90px; }
 
 /* ── LIFE TAB ──────────────────────────────── */
 .life-hero {
-  padding: var(--safe-top) 18px 16px;
+  padding: calc(var(--safe-top) + 28px) 18px 20px;
 }
 .life-section { padding: 0 18px 28px; }
 .life-section-title {
@@ -1150,7 +1119,7 @@ textarea.ev-input { resize: none; height: 90px; }
   position: sticky; top: 0; z-index: 10;
   background: rgba(250,248,245,0.97);
   backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
-  padding: var(--safe-top) 18px 12px;
+  padding: calc(var(--safe-top) + 12px) 18px 12px;
   border-bottom: 1px solid var(--border);
   display: flex; align-items: center; gap: 12px;
 }
@@ -1197,9 +1166,83 @@ textarea.ev-input { resize: none; height: 90px; }
 .qm-anchor-phrase {
   font-size: 18px; color: var(--text); font-style: italic; line-height: 1.5;
 }
+
+/* ── NOTIFICATION SETTINGS CARD ────────────── */
+.notif-card {
+  margin: 0 18px 22px;
+  background: var(--card); border-radius: 18px;
+  border: 1px solid var(--border); overflow: hidden;
+}
+.notif-card-hd {
+  padding: 13px 16px 12px;
+  display: flex; align-items: center; justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, var(--rose-light), var(--gold-light));
+}
+.notif-card-title { font-size: 12px; font-weight: 700; color: var(--text); font-family: -apple-system,Arial,sans-serif; text-transform: uppercase; letter-spacing: 1.5px; }
+.notif-card-body { padding: 14px 16px; display: flex; flex-direction: column; gap: 14px; }
+.notif-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.notif-label { font-size: 13px; color: var(--text); flex: 1; line-height: 1.4; }
+.notif-sub { font-size: 11px; color: var(--muted); font-family: -apple-system,Arial,sans-serif; margin-top: 2px; }
+.notif-enable-btn {
+  background: var(--rose); color: white; border: none;
+  border-radius: 20px; padding: 8px 16px;
+  font-size: 12px; font-weight: 600; font-family: -apple-system,Arial,sans-serif;
+  cursor: pointer; flex-shrink: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+.notif-enable-btn:active { opacity: 0.85; }
+.notif-enable-btn.enabled { background: var(--sage); }
+.notif-enable-btn.disabled { background: var(--border); color: var(--muted); }
+.notif-time-row { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.notif-time-input {
+  border: 1.5px solid var(--border); border-radius: 10px;
+  padding: 8px 12px; font-size: 14px; color: var(--text);
+  font-family: -apple-system,Arial,sans-serif;
+  background: var(--ivory); outline: none;
+}
+.notif-time-save {
+  background: var(--gold); color: white; border: none;
+  border-radius: 10px; padding: 8px 14px;
+  font-size: 12px; font-weight: 600; font-family: -apple-system,Arial,sans-serif;
+  cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.notif-time-save:active { opacity: 0.85; }
+.notif-status { font-size: 11px; color: var(--muted); font-family: -apple-system,Arial,sans-serif; font-style: italic; }
+
+/* Due date field in task modal */
+.task-due-row { display: flex; gap: 8px; margin-bottom: 12px; }
+.task-due-input {
+  flex: 1; border: 1.5px solid var(--border); border-radius: 12px;
+  padding: 11px 14px; font-size: 14px; color: var(--text);
+  font-family: -apple-system,Arial,sans-serif; outline: none;
+  background: var(--card); -webkit-appearance: none;
+}
+.task-due-input:focus { border-color: var(--gold); }
+
+/* In-app due-alert toast */
+.due-toast {
+  position: fixed; top: calc(var(--safe-top) + 12px); left: 18px; right: 18px;
+  background: #C0392B; color: white; border-radius: 14px;
+  padding: 13px 16px; z-index: 1000; font-family: -apple-system,Arial,sans-serif;
+  font-size: 13.5px; line-height: 1.5; box-shadow: 0 8px 28px rgba(0,0,0,0.2);
+  animation: slideDown 0.3s ease; display: none;
+}
+.due-toast.visible { display: block; }
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.due-toast-close { float: right; background: none; border: none; color: white; font-size: 18px; cursor: pointer; margin-left: 10px; line-height: 1; }
 </style>
 </head>
 <body>
+<!-- Due task toast -->
+<div class="due-toast" id="due-toast">
+  <button class="due-toast-close" onclick="document.getElementById('due-toast').classList.remove('visible')">×</button>
+  <span id="due-toast-msg"></span>
+</div>
+
 <div id="app">
 
   <div id="screens">
@@ -1215,24 +1258,18 @@ textarea.ev-input { resize: none; height: 90px; }
           <div class="h-name">Nivedita <span>✦</span></div>
           <div class="h-date" id="h-date"></div>
         </div>
-        <button class="backup-btn" id="backup-btn" onclick="handleBackupTap()">
-          <span class="bk-icon" id="backup-btn-icon">↑</span><span id="backup-btn-label">Backup</span>
+        <button class="backup-btn" onclick="exportBackup()">
+          <span class="bk-icon">↑</span><span>Backup</span>
         </button>
       </div>
 
       <!-- Sunday backup prompt -->
       <div id="backup-prompt">
-        <p>It's Sunday — tap <strong>Back up</strong> to push your data to GitHub automatically.</p>
+        <p>It's Sunday — time for your weekly <strong>data backup.</strong></p>
         <div class="bp-btns">
-          <button class="bp-do" onclick="exportBackup()">Back up</button>
+          <button class="bp-do" onclick="exportBackup();dismissBackupPrompt()">Back up</button>
           <button class="bp-skip" onclick="dismissBackupPrompt()">✕</button>
         </div>
-      </div>
-
-      <!-- PWA Install Banner -->
-      <div id="pwa-banner">
-        <p>📲 For the best experience, <strong>Add to Home Screen</strong> — tap the Share button (⎋) then "Add to Home Screen". Runs fullscreen like a native app.</p>
-        <button id="pwa-close" onclick="dismissPWA()">✕</button>
       </div>
 
       <!-- Forbes Banner -->
@@ -1449,6 +1486,10 @@ textarea.ev-input { resize: none; height: 90px; }
           <div class="ts-chip active" data-sec="mvp" onclick="selectTaskSection(this)">MVP Launch</div>
           <div class="ts-chip" data-sec="weekly" onclick="selectTaskSection(this)">This Week</div>
           <div class="ts-chip" data-sec="backlog" onclick="selectTaskSection(this)">Backlog</div>
+        </div>
+        <div class="task-due-row">
+          <input class="task-due-input" id="task-due-date" type="date" placeholder="Due date (optional)">
+          <input class="task-due-input" id="task-due-time" type="time" value="09:00" style="flex:0 0 auto;width:110px;">
         </div>
         <button class="task-modal-save" onclick="addTask()">Add Task</button>
       </div>
@@ -1678,6 +1719,33 @@ textarea.ev-input { resize: none; height: 90px; }
       <div class="mode-toggle">
         <button class="mode-btn active" id="btn-morning" onclick="setMode('morning')">🌅 Morning</button>
         <button class="mode-btn" id="btn-evening" onclick="setMode('evening')">🌙 Evening</button>
+      </div>
+
+      <!-- ── NOTIFICATIONS CARD ── -->
+      <div class="notif-card" id="notif-card">
+        <div class="notif-card-hd">
+          <div class="notif-card-title">🔔 Reminders &amp; Notifications</div>
+        </div>
+        <div class="notif-card-body">
+          <div class="notif-row">
+            <div>
+              <div class="notif-label">Push notifications</div>
+              <div class="notif-sub" id="notif-perm-status">Enable to receive daily reminders and task alerts</div>
+            </div>
+            <button class="notif-enable-btn" id="notif-enable-btn" onclick="requestPushPermission()">Enable</button>
+          </div>
+          <div class="notif-row" id="notif-reminder-row" style="display:none;">
+            <div>
+              <div class="notif-label">Daily habit reminder</div>
+              <div class="notif-sub">Gets sent every morning to keep you on track</div>
+            </div>
+          </div>
+          <div class="notif-time-row" id="notif-time-row" style="display:none;">
+            <input class="notif-time-input" type="time" id="notif-reminder-time" value="07:00">
+            <button class="notif-time-save" onclick="saveHabitReminder()">Save time</button>
+            <span class="notif-status" id="notif-reminder-status"></span>
+          </div>
+        </div>
       </div>
 
       <!-- ── MORNING VIEW ── -->
@@ -1967,68 +2035,60 @@ textarea.ev-input { resize: none; height: 90px; }
   </div>
 
   <!-- GROW MODAL -->
-  <div id="grow-modal">
+  <div id="grow-modal" style="position:fixed;inset:0;z-index:995;background:var(--ivory);transform:translateY(100%);transition:transform 0.38s cubic-bezier(0.32,0.72,0,1);overflow-y:auto;-webkit-overflow-scrolling:touch;padding-bottom:60px;">
 
-    <div style="position:sticky;top:0;z-index:10;background:rgba(250,248,245,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:var(--safe-top) 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
+    <div style="position:sticky;top:0;z-index:10;background:rgba(250,248,245,0.97);backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);padding:calc(var(--safe-top) + 12px) 18px 12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;">
       <button onclick="closeGrow()" style="background:none;border:none;font-size:24px;color:var(--muted);cursor:pointer;padding:4px;line-height:1;flex-shrink:0;">‹</button>
-      <div style="font-size:16px;color:var(--text);flex:1;">Grow — Personal Development</div>
+      <div style="font-size:16px;color:var(--text);flex:1;">Personal Development</div>
     </div>
 
     <!-- Hero -->
     <div style="background:linear-gradient(160deg,#1A1A1A,#2C2410);padding:28px 20px 24px;">
-      <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:rgba(201,169,110,0.65);font-family:-apple-system,Arial,sans-serif;font-weight:600;margin-bottom:8px;">Part IX — Jim Rohn</div>
-      <div style="font-size:28px;font-weight:300;color:white;margin-bottom:10px;">Personal Development</div>
-      <div style="font-size:13px;color:rgba(255,255,255,0.55);font-family:-apple-system,Arial,sans-serif;font-style:italic;line-height:1.7;margin-bottom:16px;">Structural principles for a founder building a life by design, not by drift.</div>
+      <div style="font-size:9px;text-transform:uppercase;letter-spacing:2px;color:rgba(201,169,110,0.65);font-family:-apple-system,Arial,sans-serif;font-weight:600;margin-bottom:8px;">Jim Rohn</div>
+      <div style="font-size:28px;font-weight:300;color:white;margin-bottom:10px;">Grow</div>
+      <div style="font-size:13px;color:rgba(255,255,255,0.55);font-family:-apple-system,Arial,sans-serif;font-style:italic;line-height:1.7;margin-bottom:16px;">"Success is something you attract by the person you become. Work on yourself more than you work on your job."</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;">
         <span style="background:var(--gold);color:#1A1A1A;font-size:10px;font-family:-apple-system,Arial,sans-serif;font-weight:700;padding:4px 12px;border-radius:20px;">9 Principles</span>
         <span style="background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.7);font-size:10px;font-family:-apple-system,Arial,sans-serif;padding:4px 12px;border-radius:20px;">Tap each to expand</span>
       </div>
     </div>
 
-    <!-- Intro callout -->
-    <div style="margin:20px 18px 4px;background:var(--gold-light);border-left:4px solid var(--gold);border-radius:0 12px 12px 0;padding:14px 16px;">
-      <p style="font-size:13.5px;line-height:1.8;color:var(--text);font-style:italic;">"Success is something you attract, not something you pursue. You attract it by becoming the kind of person success is looking for. Work on yourself first."</p>
-    </div>
-
     <!-- Principles -->
-    <div style="padding:16px 18px 0;">
+    <div style="padding:20px 18px 0;">
 
       <!-- 1 -->
       <div class="gw-card">
-        <div class="gw-card-hd" onclick="toggleGrow(this)">
-          <div class="gw-num">1</div>
-          <div class="gw-card-title">The Core Question — What Are You Becoming?</div>
+        <div class="gw-hd" onclick="toggleGrow(this)">
+          <div class="gw-hd-inner"><div class="gw-num">1</div><div class="gw-title">The Core Question — What Are You Becoming?</div></div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-card-body">
+        <div class="gw-body">
           <p>The major question to ask is not what you are getting. It is <strong>what you are becoming.</strong> True happiness is not contained in what you get. It is contained in what you become.</p>
-          <p>This reframes everything — every practice in this plan, every hour spent on Designup. The ₹5 lakhs, the Forbes feature, the successful launch — those are byproducts. The goal is who you are becoming in the pursuit of them.</p>
+          <p>This reframes everything — every practice, every hour spent on Designup. The ₹5 lakhs, the Forbes feature, the successful launch — those are byproducts. The goal is who you are becoming in the pursuit of them.</p>
           <p>Success is something you attract, not something you pursue. You attract it by becoming the kind of person success is looking for. Personal development is not separate from your entrepreneurial ambition. It is the engine of it.</p>
         </div>
       </div>
 
       <!-- 2 -->
       <div class="gw-card">
-        <div class="gw-card-hd" onclick="toggleGrow(this)">
-          <div class="gw-num">2</div>
-          <div class="gw-card-title">The Three Ways to Know — Read, Listen, Observe</div>
+        <div class="gw-hd" onclick="toggleGrow(this)">
+          <div class="gw-hd-inner"><div class="gw-num">2</div><div class="gw-title">The Three Ways to Know — Read, Listen, Observe</div></div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-card-body">
+        <div class="gw-body">
           <p><strong>Read or listen actively — thirty minutes daily, no miss.</strong> You are primarily a listener. That works. The condition is non-negotiable: active engagement, notebook open, pause when something lands, write one line. Miss a meal before you miss your thirty minutes. Undernourished minds produce undernourished lives.</p>
           <p><strong>Listen to people who are ahead of you.</strong> Get around founders, builders, thinkers who are further along and listen more than you speak. One conversation with the right person can compress years.</p>
-          <p><strong>Observe.</strong> Success leaves clues. Watch how people who have built what you want to build carry themselves, make decisions, handle setbacks. Wherever you are, be there fully. Do not miss anything.</p>
+          <p><strong>Observe.</strong> Success leaves clues. Watch how people who have built what you want to build carry themselves, make decisions, handle setbacks. Do not miss anything.</p>
         </div>
       </div>
 
       <!-- 3 -->
       <div class="gw-card">
-        <div class="gw-card-hd" onclick="toggleGrow(this)">
-          <div class="gw-num">3</div>
-          <div class="gw-card-title">From Learning to Massive Action</div>
+        <div class="gw-hd" onclick="toggleGrow(this)">
+          <div class="gw-hd-inner"><div class="gw-num">3</div><div class="gw-title">From Learning to Massive Action</div></div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-card-body">
+        <div class="gw-body">
           <p>Do not let your learning lead only to knowledge. <strong>Knowledge without action produces nothing.</strong> Let your learning lead to action — and action leads to everything.</p>
           <p>The formula: pick up a good idea, take <strong>massive</strong> action. Massive is the key word. If you are going to reach customers, reach a thousand. Write your game plan on paper. Do not operate from your head — operate from paper.</p>
           <p>Do not try to beat the system. Find out how it works, then work it. Cutting corners produces a cut-down life. Do it right, even when it seems to take longer. Be a quick learner. Don't be stubborn.</p>
@@ -2037,12 +2097,11 @@ textarea.ev-input { resize: none; height: 90px; }
 
       <!-- 4 -->
       <div class="gw-card">
-        <div class="gw-card-hd" onclick="toggleGrow(this)">
-          <div class="gw-num">4</div>
-          <div class="gw-card-title">The Law of Use — Use It or Lose It</div>
+        <div class="gw-hd" onclick="toggleGrow(this)">
+          <div class="gw-hd-inner"><div class="gw-num">4</div><div class="gw-title">The Law of Use — Use It or Lose It</div></div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-card-body">
+        <div class="gw-body">
           <p>Whatever you do not use, you lose. This is not philosophy. <strong>It is law.</strong> Ambition unused declines. Vitality unused diminishes. Faith unused decreases. Talent unused is lost.</p>
           <p>Take a new inventory of yourself. Make sure that all of your talent, ability, mentality, ingenuity, vitality, courage, strong feelings, and faith are being used. The practices in this plan — the gym, the mirror work, the pranayam, the writing — are all acts of use. You are keeping the instrument alive.</p>
           <p>If you tie your arm to your body long enough, you will never use it again. The only way to keep it is to keep using it. Do not let any part of what you are capable of go unused.</p>
@@ -2051,72 +2110,69 @@ textarea.ev-input { resize: none; height: 90px; }
 
       <!-- 5 -->
       <div class="gw-card">
-        <div class="gw-card-hd" onclick="toggleGrow(this)">
-          <div class="gw-num">5</div>
-          <div class="gw-card-title">The Law of Sowing and Reaping</div>
+        <div class="gw-hd" onclick="toggleGrow(this)">
+          <div class="gw-hd-inner"><div class="gw-num">5</div><div class="gw-title">The Law of Sowing and Reaping</div></div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-card-body">
-          <p>Sow bad, reap bad. Sow good, reap good. <strong>You do not reap what you sow — you reap much more than what you sow.</strong> It works in both directions. There are many ways to sow. You could sometimes lose — that is part of this planet. And if you do not sow at all, you do not even have a chance.</p>
+        <div class="gw-body">
+          <p>Sow bad, reap bad. Sow good, reap good. <strong>You do not reap what you sow — you reap much more than what you sow.</strong> It works in both directions. If you do not sow at all, you do not even have a chance.</p>
           <p>The crop you have right now is the one you planted. If you do not like it, look in the mirror. Then change what you are planting.</p>
-          <p>The daily practices are sowing acts. Designup's launch is a sowing act. Plant well, plant massively, and trust the law. The harvest comes — but only after the planting.</p>
+          <p>The daily practices are sowing acts. Designup's MVP launch is a sowing act. Plant well, plant massively, and trust the law. The harvest comes — but only after the planting.</p>
         </div>
       </div>
 
       <!-- 6 -->
       <div class="gw-card">
-        <div class="gw-card-hd" onclick="toggleGrow(this)">
-          <div class="gw-num">6</div>
-          <div class="gw-card-title">Goals — Designed, Not Drifted</div>
+        <div class="gw-hd" onclick="toggleGrow(this)">
+          <div class="gw-hd-inner"><div class="gw-num">6</div><div class="gw-title">Goals — Designed, Not Drifted</div></div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-card-body">
+        <div class="gw-body">
           <p>It is easy to let life deteriorate into <strong>making a living instead of designing a life.</strong> You have chosen to design. Now make that design precise.</p>
           <p><strong>Reasons first.</strong> If you have enough reasons, you can do the most incredible things. Get a long list — personal reasons, family reasons, the feeling of being a winner, the people you want to serve through Designup, the woman you are becoming.</p>
-          <p><strong>Long-range goals:</strong> Forbes 30 Under 30. ₹5 lakhs a month. The artist. The sovereign founder. Keep these alive. Without dreams, direction disappears.</p>
-          <p><strong>Short-range goals — three categories:</strong> economic (income, Designup growth), things (what you want to acquire and experience), personal development (who you want to become). <strong>Write them down. Work them.</strong> Your goals affect everything — how you walk into a room, how you answer a question. Set worthy goals and everything lifts.</p>
+          <p><strong>Long-range goals:</strong> Forbes 30 Under 30. ₹5 lakhs a month. The sovereign founder. Keep these alive. Without dreams, direction disappears.</p>
+          <p><strong>Short-range goals — three categories:</strong> economic (income, Designup growth), things (what you want to acquire and experience), personal development (who you want to become). Write them down. Work them. Your goals affect everything — how you walk into a room, how you answer a question. Set worthy goals and everything lifts.</p>
         </div>
       </div>
 
       <!-- 7 -->
       <div class="gw-card">
-        <div class="gw-card-hd" onclick="toggleGrow(this)">
-          <div class="gw-num">7</div>
-          <div class="gw-card-title">Attitude Diseases — The Ones to Watch</div>
+        <div class="gw-hd" onclick="toggleGrow(this)">
+          <div class="gw-hd-inner"><div class="gw-num">7</div><div class="gw-title">Attitude Diseases — The Ones to Watch</div></div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-card-body">
-          <p>These are weeds. They grow normally. The work is not to be surprised when they appear but to handle them immediately. Neglect them for a week and they cost you a year of repair.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px;">
-            <div style="background:#FFF5F5;border-radius:10px;padding:12px;border:1px solid var(--border);border-top:3px solid #C0392B;">
+        <div class="gw-body">
+          <p>These are weeds. They grow normally. Neglect them for a week and they cost you a year of repair.</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
+            <div style="background:#FFF5F5;border-radius:12px;padding:12px;border:1px solid #F5C6C6;">
               <div style="font-size:12px;font-weight:700;color:#C0392B;font-family:-apple-system,Arial,sans-serif;margin-bottom:4px;">Indifference</div>
-              <div style="font-size:11.5px;color:#3A4A5C;line-height:1.55;font-family:-apple-system,Arial,sans-serif;">The shrug. No strong feeling. Creeps in during long stretches of solo building.</div>
-              <div style="font-size:11px;color:var(--sage);margin-top:4px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: bring everything you have to every action.</div>
+              <div style="font-size:11.5px;color:#3A4A5C;line-height:1.55;font-family:-apple-system,Arial,sans-serif;">The shrug. Creeps in during long stretches of solo building.</div>
+              <div style="font-size:11px;color:var(--sage);margin-top:5px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: bring everything to every action.</div>
             </div>
-            <div style="background:#FFF5F5;border-radius:10px;padding:12px;border:1px solid var(--border);border-top:3px solid #C0392B;">
+            <div style="background:#FFF5F5;border-radius:12px;padding:12px;border:1px solid #F5C6C6;">
               <div style="font-size:12px;font-weight:700;color:#C0392B;font-family:-apple-system,Arial,sans-serif;margin-bottom:4px;">Self-Doubt</div>
               <div style="font-size:11.5px;color:#3A4A5C;line-height:1.55;font-family:-apple-system,Arial,sans-serif;">Chronic questioning of whether you can do it. Devastates the future.</div>
-              <div style="font-size:11px;color:var(--sage);margin-top:4px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: become a believer — in the work, in yourself.</div>
+              <div style="font-size:11px;color:var(--sage);margin-top:5px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: become a believer in yourself.</div>
             </div>
-            <div style="background:#FFF5F5;border-radius:10px;padding:12px;border:1px solid var(--border);border-top:3px solid #C0392B;">
+            <div style="background:#FFF5F5;border-radius:12px;padding:12px;border:1px solid #F5C6C6;">
               <div style="font-size:12px;font-weight:700;color:#C0392B;font-family:-apple-system,Arial,sans-serif;margin-bottom:4px;">Worry</div>
               <div style="font-size:11.5px;color:#3A4A5C;line-height:1.55;font-family:-apple-system,Arial,sans-serif;">Devastating. Health problems, focus problems, creative problems.</div>
-              <div style="font-size:11px;color:var(--sage);margin-top:4px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: evening brain dump. Give worry nowhere to live.</div>
+              <div style="font-size:11px;color:var(--sage);margin-top:5px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: evening brain dump. Give worry nowhere to live.</div>
             </div>
-            <div style="background:#FFF5F5;border-radius:10px;padding:12px;border:1px solid var(--border);border-top:3px solid #C0392B;">
+            <div style="background:#FFF5F5;border-radius:12px;padding:12px;border:1px solid #F5C6C6;">
               <div style="font-size:12px;font-weight:700;color:#C0392B;font-family:-apple-system,Arial,sans-serif;margin-bottom:4px;">Over-Caution</div>
-              <div style="font-size:11.5px;color:#3A4A5C;line-height:1.55;font-family:-apple-system,Arial,sans-serif;">Waiting until it is safe. If trying is risky, wait until you get the bill for not trying.</div>
-              <div style="font-size:11px;color:var(--sage);margin-top:4px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: ask for adventure, not security.</div>
+              <div style="font-size:11.5px;color:#3A4A5C;line-height:1.55;font-family:-apple-system,Arial,sans-serif;">Waiting until it is safe. Get the bill for not trying.</div>
+              <div style="font-size:11px;color:var(--sage);margin-top:5px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: ask for adventure, not security.</div>
             </div>
-            <div style="background:#FFF5F5;border-radius:10px;padding:12px;border:1px solid var(--border);border-top:3px solid #C0392B;">
+            <div style="background:#FFF5F5;border-radius:12px;padding:12px;border:1px solid #F5C6C6;">
               <div style="font-size:12px;font-weight:700;color:#C0392B;font-family:-apple-system,Arial,sans-serif;margin-bottom:4px;">Pessimism</div>
               <div style="font-size:11.5px;color:#3A4A5C;line-height:1.55;font-family:-apple-system,Arial,sans-serif;">Always checking what is wrong. Our lives are mostly affected by the way we think things are.</div>
-              <div style="font-size:11px;color:var(--sage);margin-top:4px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: train the mind to look for what is right.</div>
+              <div style="font-size:11px;color:var(--sage);margin-top:5px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: train the mind to look for what is right.</div>
             </div>
-            <div style="background:#FFF5F5;border-radius:10px;padding:12px;border:1px solid var(--border);border-top:3px solid #C0392B;">
+            <div style="background:#FFF5F5;border-radius:12px;padding:12px;border:1px solid #F5C6C6;">
               <div style="font-size:12px;font-weight:700;color:#C0392B;font-family:-apple-system,Arial,sans-serif;margin-bottom:4px;">Complaining</div>
               <div style="font-size:11.5px;color:#3A4A5C;line-height:1.55;font-family:-apple-system,Arial,sans-serif;">Five minutes of complaining wastes five minutes and plants seeds of worse.</div>
-              <div style="font-size:11px;color:var(--sage);margin-top:4px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: don't. Not for five minutes.</div>
+              <div style="font-size:11px;color:var(--sage);margin-top:5px;font-style:italic;font-family:-apple-system,Arial,sans-serif;">Cure: don't. Not for five minutes.</div>
             </div>
           </div>
         </div>
@@ -2124,28 +2180,27 @@ textarea.ev-input { resize: none; height: 90px; }
 
       <!-- 8 -->
       <div class="gw-card">
-        <div class="gw-card-hd" onclick="toggleGrow(this)">
-          <div class="gw-num">8</div>
-          <div class="gw-card-title">The Four Emotions That Turn a Life Around</div>
+        <div class="gw-hd" onclick="toggleGrow(this)">
+          <div class="gw-hd-inner"><div class="gw-num">8</div><div class="gw-title">The Four Emotions That Turn a Life Around</div></div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-card-body">
+        <div class="gw-body">
           <p>These are not techniques. They are emotional states that, when they arrive genuinely, produce irreversible change.</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:12px;">
-            <div style="background:var(--gold-light);border-radius:10px;padding:13px;border:1px solid var(--border);border-top:3px solid var(--gold);text-align:center;">
-              <div style="font-size:18px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:5px;">Disgust</div>
-              <div style="font-size:12px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">"I have had it." May not be the day it ends, but the day it begins. You have had this day already. Remember it as evidence.</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">
+            <div style="background:var(--gold-light);border-radius:12px;padding:14px;border:1px solid #E8D099;text-align:center;">
+              <div style="font-size:22px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:5px;">Disgust</div>
+              <div style="font-size:12px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">"I have had it." May not be the day it ends, but the day it begins.</div>
             </div>
-            <div style="background:var(--gold-light);border-radius:10px;padding:13px;border:1px solid var(--border);border-top:3px solid var(--gold);text-align:center;">
-              <div style="font-size:18px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:5px;">Decision</div>
-              <div style="font-size:12px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">The inner civil war resolved. When you have decided, act. Easy or hard — just get it done.</div>
+            <div style="background:var(--gold-light);border-radius:12px;padding:14px;border:1px solid #E8D099;text-align:center;">
+              <div style="font-size:22px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:5px;">Decision</div>
+              <div style="font-size:12px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">The inner civil war resolved. When you have decided, act. Easy or hard — get it done.</div>
             </div>
-            <div style="background:var(--gold-light);border-radius:10px;padding:13px;border:1px solid var(--border);border-top:3px solid var(--gold);text-align:center;">
-              <div style="font-size:18px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:5px;">Desire</div>
+            <div style="background:var(--gold-light);border-radius:12px;padding:14px;border:1px solid #E8D099;text-align:center;">
+              <div style="font-size:22px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:5px;">Desire</div>
               <div style="font-size:12px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">Wanting it badly enough. Comes from inside, not outside. Keep the barriers down.</div>
             </div>
-            <div style="background:var(--gold-light);border-radius:10px;padding:13px;border:1px solid var(--border);border-top:3px solid var(--gold);text-align:center;">
-              <div style="font-size:18px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:5px;">Resolve</div>
+            <div style="background:var(--gold-light);border-radius:12px;padding:14px;border:1px solid #E8D099;text-align:center;">
+              <div style="font-size:22px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:5px;">Resolve</div>
               <div style="font-size:12px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">"I will." Two of the most powerful words. You are your mountain and you intend to wave from the top.</div>
             </div>
           </div>
@@ -2153,29 +2208,28 @@ textarea.ev-input { resize: none; height: 90px; }
       </div>
 
       <!-- 9 -->
-      <div class="gw-card" style="margin-bottom:20px;">
-        <div class="gw-card-hd" onclick="toggleGrow(this)">
-          <div class="gw-num">9</div>
-          <div class="gw-card-title">Four Questions to Live With</div>
+      <div class="gw-card" style="margin-bottom:0;">
+        <div class="gw-hd" onclick="toggleGrow(this)">
+          <div class="gw-hd-inner"><div class="gw-num">9</div><div class="gw-title">Four Questions to Live With</div></div>
           <div class="gw-arr">▾</div>
         </div>
-        <div class="gw-card-body">
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:9px;">
-            <div style="background:var(--gold-light);border-radius:10px;padding:15px 12px;text-align:center;border:1px solid #E8D5A0;">
-              <div style="font-size:22px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:6px;">Why?</div>
-              <p style="font-size:11px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">Why try? Why read? Why build? Why go that far? Find your reasons. They change everything.</p>
+        <div class="gw-body">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">
+            <div style="background:var(--rose-light);border-radius:12px;padding:16px 12px;text-align:center;border:1px solid var(--border);">
+              <div style="font-size:24px;color:var(--rose);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:6px;">Why?</div>
+              <div style="font-size:11.5px;color:#3A3330;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">Why try? Why read? Why build? Why go that far? Find your reasons. They change everything.</div>
             </div>
-            <div style="background:var(--gold-light);border-radius:10px;padding:15px 12px;text-align:center;border:1px solid #E8D5A0;">
-              <div style="font-size:22px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:6px;">Why not?</div>
-              <p style="font-size:11px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">What else are you going to do with your life? Why not see how far you can go?</p>
+            <div style="background:var(--rose-light);border-radius:12px;padding:16px 12px;text-align:center;border:1px solid var(--border);">
+              <div style="font-size:24px;color:var(--rose);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:6px;">Why not?</div>
+              <div style="font-size:11.5px;color:#3A3330;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">What else are you going to do with your life? Why not see how far you can go?</div>
             </div>
-            <div style="background:var(--gold-light);border-radius:10px;padding:15px 12px;text-align:center;border:1px solid #E8D5A0;">
-              <div style="font-size:22px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:6px;">Why not you?</div>
-              <p style="font-size:11px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">Some people have done the most incredible things with the most limited starts. Why not you?</p>
+            <div style="background:var(--rose-light);border-radius:12px;padding:16px 12px;text-align:center;border:1px solid var(--border);">
+              <div style="font-size:24px;color:var(--rose);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:6px;">Why not you?</div>
+              <div style="font-size:11.5px;color:#3A3330;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">Some people have done the most incredible things with the most limited starts. Why not you?</div>
             </div>
-            <div style="background:var(--gold-light);border-radius:10px;padding:15px 12px;text-align:center;border:1px solid #E8D5A0;">
-              <div style="font-size:22px;color:var(--gold);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:6px;">Why not now?</div>
-              <p style="font-size:11px;color:#6B4C00;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">Do not postpone the better future. New goals. Massive action. The time is now.</p>
+            <div style="background:var(--rose-light);border-radius:12px;padding:16px 12px;text-align:center;border:1px solid var(--border);">
+              <div style="font-size:24px;color:var(--rose);font-weight:700;font-family:-apple-system,Arial,sans-serif;margin-bottom:6px;">Why not now?</div>
+              <div style="font-size:11.5px;color:#3A3330;line-height:1.6;font-family:-apple-system,Arial,sans-serif;">Do not postpone the better future. New goals. Massive action. The MVP is launching now.</div>
             </div>
           </div>
         </div>
@@ -2451,40 +2505,6 @@ textarea.ev-input { resize: none; height: 90px; }
     </div>
   </div>
 
-  <!-- BACKUP TOAST -->
-  <div id="backup-toast"></div>
-
-  <!-- GITHUB SETUP MODAL -->
-  <div id="gh-modal" onclick="closeGhModal(event)">
-    <div class="gh-box">
-      <div class="gh-title">GitHub Backup Setup</div>
-      <div class="gh-sub">One-time setup. After this, tap Backup and your data is pushed to GitHub automatically — no other steps.</div>
-      <div class="gh-field">
-        <label class="gh-label">Personal Access Token</label>
-        <input class="gh-input" id="gh-token" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off" autocorrect="off" spellcheck="false">
-        <div class="gh-hint">Settings → Developer settings → Personal access tokens → Fine-grained. Give it Contents: Read & write on your repo.</div>
-      </div>
-      <div class="gh-field">
-        <label class="gh-label">GitHub Username</label>
-        <input class="gh-input" id="gh-owner" type="text" placeholder="your-username" autocomplete="off" autocorrect="off" spellcheck="false">
-      </div>
-      <div class="gh-field">
-        <label class="gh-label">Repository Name</label>
-        <input class="gh-input" id="gh-repo" type="text" placeholder="my-repo" autocomplete="off" autocorrect="off" spellcheck="false">
-      </div>
-      <div class="gh-field">
-        <label class="gh-label">File Path in Repo</label>
-        <input class="gh-input" id="gh-path" type="text" placeholder="index.html" autocomplete="off" autocorrect="off" spellcheck="false">
-        <div class="gh-hint">e.g. index.html or docs/index.html</div>
-      </div>
-      <div class="gh-field">
-        <label class="gh-label">Branch</label>
-        <input class="gh-input" id="gh-branch" type="text" placeholder="main" autocomplete="off" autocorrect="off" spellcheck="false">
-      </div>
-      <button class="gh-save" onclick="saveGhConfig()">Save &amp; Connect</button>
-    </div>
-  </div>
-
   <!-- BOTTOM NAV -->
   <nav id="bottom-nav">
     <button class="nav-tab active" onclick="go('home',this)"><span class="ni">🏠</span><span>Home</span></button>
@@ -2496,9 +2516,6 @@ textarea.ev-input { resize: none; height: 90px; }
 
 </div>
 <script>
-
-// ── DATA BOOTSTRAP (replaced during backup) ──────────────
-const DATA_BOOTSTRAP = null;
 
 // ── QUOTES ───────────────────────────────────────────────
 const Q = [
@@ -2854,30 +2871,15 @@ function buildWeek() {
 
 // ── PWA ──────────────────────────────────────────────────
 function dismissPWA() {
-  document.getElementById('pwa-banner').style.display = 'none';
-  localStorage.setItem('nos_pwa', '1');
+  document.getElementById('pwa-banner').style.display='none';
+  localStorage.setItem('nos_pwa','1');
 }
 
-function initPWABanner() {
-  // Only show in Safari browser, not when installed as home screen app
-  const isStandalone = window.navigator.standalone === true
-    || window.matchMedia('(display-mode: standalone)').matches;
-  if (isStandalone) return; // already on home screen — perfect, no banner needed
-  if (localStorage.getItem('nos_pwa') === '1') return; // dismissed before
-  document.getElementById('pwa-banner').style.display = 'flex';
-}
+// go() is defined in the Calendar section above
 
 // ── VIEWPORT ─────────────────────────────────────────────
-// Use visualViewport for accuracy on iPhone (accounts for Safari chrome shrinking)
-function fixH() {
-  const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
-  document.getElementById('app').style.height = h + 'px';
-}
-fixH();
-window.addEventListener('resize', fixH);
-if (window.visualViewport) window.visualViewport.addEventListener('resize', fixH);
-// Refresh height when returning to app (e.g. from background)
-document.addEventListener('visibilitychange', () => { if (!document.hidden) fixH(); });
+function fixH() { document.getElementById('app').style.height = window.innerHeight+'px'; }
+fixH(); window.addEventListener('resize', fixH);
 
 // ── CALENDAR ─────────────────────────────────────────────
 const CAT_COLORS = {
@@ -3056,6 +3058,18 @@ function saveStartup(key, val) {
 function getTasks() { return JSON.parse(localStorage.getItem('nos_tasks') || '[]'); }
 function saveTasks(arr) { localStorage.setItem('nos_tasks', JSON.stringify(arr)); }
 
+function dueBadge(due) {
+  if (!due) return '';
+  const now = new Date();
+  const d = new Date(due);
+  const diffMs = d - now;
+  const diffH = diffMs / 36e5;
+  if (diffMs < 0) return `<span class="due-badge due-overdue">Overdue</span>`;
+  if (diffH < 24) return `<span class="due-badge due-soon">Due today</span>`;
+  if (diffH < 72) return `<span class="due-badge due-ok">Due ${d.toLocaleDateString('en-IN',{weekday:'short'})}</span>`;
+  return `<span class="due-badge due-none">${d.toLocaleDateString('en-IN',{day:'numeric',month:'short'})}</span>`;
+}
+
 function buildTasks() {
   const tasks = getTasks();
   ['mvp','weekly','backlog'].forEach(sec => {
@@ -3070,6 +3084,7 @@ function buildTasks() {
       <div class="task-item${t.done?' done':''}" onclick="toggleTask('${t.id}')">
         <div class="task-check"><span class="task-check-tick">✓</span></div>
         <div class="task-text">${t.text}</div>
+        ${!t.done && t.due ? dueBadge(t.due) : ''}
         <button class="task-del" onclick="deleteTask(event,'${t.id}')">×</button>
       </div>`).join('');
   });
@@ -3092,6 +3107,8 @@ function openTaskModal(sec) {
   currentTaskSection = sec;
   document.querySelectorAll('.ts-chip').forEach(c => c.classList.toggle('active', c.dataset.sec === sec));
   document.getElementById('task-text-input').value = '';
+  document.getElementById('task-due-date').value = '';
+  document.getElementById('task-due-time').value = '09:00';
   document.getElementById('task-modal').classList.add('open');
   setTimeout(() => document.getElementById('task-text-input').focus(), 300);
 }
@@ -3110,9 +3127,14 @@ function selectTaskSection(el) {
 function addTask() {
   const text = document.getElementById('task-text-input').value.trim();
   if (!text) return;
+  const dateVal = document.getElementById('task-due-date').value;
+  const timeVal = document.getElementById('task-due-time').value || '09:00';
+  const due = dateVal ? new Date(dateVal + 'T' + timeVal).toISOString() : null;
+  const id = Date.now().toString();
   const tasks = getTasks();
-  tasks.push({id:Date.now().toString(), text, done:false, section:currentTaskSection, created:new Date().toISOString()});
+  tasks.push({id, text, done:false, section:currentTaskSection, created:new Date().toISOString(), due});
   saveTasks(tasks);
+  if (due) scheduleTaskPush(id, text, new Date(due));
   document.getElementById('task-modal').classList.remove('open');
   buildTasks();
 }
@@ -3187,165 +3209,118 @@ function go(name, btn) {
 }
 
 // ── EXPORT / BACKUP ──────────────────────────────────────
-// ── GITHUB CONFIG ────────────────────────────────────────
-function getGhConfig() {
-  return JSON.parse(localStorage.getItem('nos_gh_config') || 'null');
-}
+function exportBackup() {
+  const now = new Date();
+  const dateStr = now.toISOString().split('T')[0];
+  const timeStr = now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'});
 
-function saveGhConfig() {
-  const token  = document.getElementById('gh-token').value.trim();
-  const owner  = document.getElementById('gh-owner').value.trim();
-  const repo   = document.getElementById('gh-repo').value.trim();
-  const path   = document.getElementById('gh-path').value.trim() || 'index.html';
-  const branch = document.getElementById('gh-branch').value.trim() || 'main';
-  if (!token || !owner || !repo) { showToast('Fill in all required fields'); return; }
-  localStorage.setItem('nos_gh_config', JSON.stringify({ token, owner, repo, path, branch }));
-  closeGhModal();
-  updateBackupBtn();
-  showToast('✓ GitHub connected — tap Backup anytime');
-}
-
-function openGhModal() {
-  const cfg = getGhConfig();
-  if (cfg) {
-    document.getElementById('gh-token').value  = cfg.token;
-    document.getElementById('gh-owner').value  = cfg.owner;
-    document.getElementById('gh-repo').value   = cfg.repo;
-    document.getElementById('gh-path').value   = cfg.path;
-    document.getElementById('gh-branch').value = cfg.branch;
-  } else {
-    document.getElementById('gh-branch').value = 'main';
-    document.getElementById('gh-path').value   = 'index.html';
-  }
-  document.getElementById('gh-modal').classList.add('open');
-}
-
-function closeGhModal(e) {
-  if (e && e.target !== document.getElementById('gh-modal')) return;
-  document.getElementById('gh-modal').classList.remove('open');
-}
-
-function updateBackupBtn() {
-  const cfg = getGhConfig();
-  const icon  = document.getElementById('backup-btn-icon');
-  const label = document.getElementById('backup-btn-label');
-  if (!cfg) {
-    icon.textContent  = '⚙';
-    label.textContent = 'Setup';
-  } else {
-    icon.textContent  = '↑';
-    label.textContent = 'Backup';
-  }
-}
-
-// ── BACKUP TOAST ─────────────────────────────────────────
-let toastTimer = null;
-function showToast(msg, duration = 3000) {
-  const el = document.getElementById('backup-toast');
-  el.textContent = msg;
-  el.classList.add('show');
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => el.classList.remove('show'), duration);
-}
-
-// ── BACKUP — tap once, data pushed to GitHub automatically ──
-function handleBackupTap() {
-  const cfg = getGhConfig();
-  if (!cfg) { openGhModal(); return; }
-  exportBackup();
-}
-
-async function exportBackup() {
-  const cfg = getGhConfig();
-  if (!cfg) { openGhModal(); return; }
-
-  // Collect all nos_ data — exclude GitHub credentials (never embed in file)
-  const data = {};
+  // Gather all nos_ keys from localStorage
+  const backup = { exported: now.toISOString(), version: '1.0', data: {} };
   for (let i = 0; i < localStorage.length; i++) {
     const key = localStorage.key(i);
-    if (key && key.startsWith('nos_') && key !== 'nos_gh_config') {
-      try { data[key] = JSON.parse(localStorage.getItem(key)); }
-      catch(e) { data[key] = localStorage.getItem(key); }
+    if (key && key.startsWith('nos_')) {
+      try { backup.data[key] = JSON.parse(localStorage.getItem(key)); }
+      catch(e) { backup.data[key] = localStorage.getItem(key); }
     }
   }
 
-  // Embed data into current HTML
-  const currentHtml = document.documentElement.outerHTML;
-  const backupHtml = currentHtml.replace(
-    'const DATA_BOOTSTRAP = null;',
-    `const DATA_BOOTSTRAP = ${JSON.stringify(data)};`
-  );
-
-  const { token, owner, repo, path, branch } = cfg;
-  const apiBase = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
-  const headers = {
-    'Authorization': `Bearer ${token}`,
-    'Accept': 'application/vnd.github+json',
-    'Content-Type': 'application/json'
+  // Human-readable summary
+  const goals = backup.data.nos_goals || {};
+  const events = backup.data.nos_calendar || [];
+  const thoughts = backup.data.nos_thoughts || [];
+  const streaks = {
+    skin:    (backup.data.nos_s_skin    || {}).count || 0,
+    morning: (backup.data.nos_s_morning || {}).count || 0,
+    voice:   (backup.data.nos_s_voice   || {}).count || 0,
+    listen:  (backup.data.nos_s_listen  || {}).count || 0,
   };
 
-  showToast('Backing up…', 30000);
+  const readable = `NIVEDITA — PERSONAL OS BACKUP
+Exported: ${dateStr} at ${timeStr}
+${'─'.repeat(40)}
 
-  try {
-    // 1. Get current file SHA (required by GitHub API to update a file)
-    let sha = null;
-    const getRes = await fetch(`${apiBase}?ref=${branch}`, { headers });
-    if (getRes.ok) {
-      const info = await getRes.json();
-      sha = info.sha;
-    } else if (getRes.status !== 404) {
-      throw new Error('GitHub error ' + getRes.status);
-    }
+STREAKS
+No Skin Picking:  ${streaks.skin} days
+Morning Ritual:   ${streaks.morning} days
+Voice Practice:   ${streaks.voice} days
+Listening:        ${streaks.listen} days
 
-    // 2. Push updated file
-    const now = new Date();
-    const dateStr = now.toISOString().split('T')[0];
-    const body = {
-      message: `backup: ${dateStr} ${now.toLocaleTimeString('en-IN',{hour:'2-digit',minute:'2-digit'})}`,
-      content: btoa(unescape(encodeURIComponent(backupHtml))),
-      branch
-    };
-    if (sha) body.sha = sha;
+CAREER & LEGACY
+1 Year Vision:    ${goals.career_1yr || '—'}
+3 Year Vision:    ${goals.career_3yr || '—'}
+5 Year Vision:    ${goals.career_5yr || '—'}
+Legacy:           ${goals.legacy || '—'}
+This Month:       ${goals.month_focus || '—'}
 
-    const putRes = await fetch(apiBase, {
-      method: 'PUT', headers, body: JSON.stringify(body)
-    });
+FINANCIAL
+Earning Target:   ${goals.fin_earn_target || '—'}
+Current Month:    ${goals.fin_current || '—'}
+Savings Target:   ${goals.fin_savings || '—'}
+Next Milestone:   ${goals.fin_milestone || '—'}
 
-    if (!putRes.ok) {
-      const err = await putRes.json();
-      throw new Error(err.message || 'Push failed');
-    }
+PERSONAL GOALS
+1: ${goals.personal_1 || '—'}
+2: ${goals.personal_2 || '—'}
+3: ${goals.personal_3 || '—'}
+Personality Focus: ${goals.personality_focus || '—'}
+Discipline Focus:  ${goals.discipline_focus || '—'}
 
-    localStorage.setItem('nos_last_backup', dateStr);
-    dismissBackupPrompt();
-    showToast('✓ Backed up to GitHub');
+HEALTH GOALS
+Skin:    ${goals.health_skin || '—'}
+Gut:     ${goals.health_gut || '—'}
+Fitness: ${goals.health_fitness || '—'}
+Sleep:   ${goals.health_sleep || '—'}
 
-  } catch (err) {
-    showToast('✗ ' + err.message, 5000);
-    console.error('Backup error:', err);
+CALENDAR (${events.length} events)
+${events.sort((a,b)=>a.date>b.date?1:-1).map(e=>`${e.date}${e.time?' '+e.time:''} [${e.cat}] ${e.title}${e.notes?' — '+e.notes:''}`).join('\n') || '— No events'}
+
+THOUGHTS & CAPTURES (${thoughts.length})
+${thoughts.map(t=>`[${t.created.split('T')[0]}]${t.taggedDate?' → '+t.taggedDate:''} ${t.text}`).join('\n') || '— None'}
+
+${'─'.repeat(40)}
+Full JSON backup also included below.
+${'─'.repeat(40)}
+
+${JSON.stringify(backup, null, 2)}`;
+
+  const filename = `nivedita-os-${dateStr}.txt`;
+
+  // iOS native share (best on iPhone)
+  if (navigator.share) {
+    const file = new File([readable], filename, {type:'text/plain'});
+    navigator.share({files:[file], title:'Nivedita OS Backup — '+dateStr})
+      .then(() => {
+        localStorage.setItem('nos_last_backup', dateStr);
+        dismissBackupPrompt();
+      })
+      .catch(() => fallbackDownload(readable, filename));
+  } else {
+    fallbackDownload(readable, filename);
   }
+}
+
+function fallbackDownload(content, filename) {
+  const blob = new Blob([content], {type:'text/plain'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = filename;
+  document.body.appendChild(a); a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  localStorage.setItem('nos_last_backup', new Date().toISOString().split('T')[0]);
 }
 
 function checkSundayBackup() {
   const today = new Date();
-  if (today.getDay() !== 0) return;
+  if (today.getDay() !== 0) return; // not Sunday
   const lastBackup = localStorage.getItem('nos_last_backup');
-  if (lastBackup === today.toISOString().split('T')[0]) return;
+  const thisWeekSunday = today.toISOString().split('T')[0];
+  if (lastBackup === thisWeekSunday) return; // already backed up today
   document.getElementById('backup-prompt').style.display = 'flex';
 }
 
 function dismissBackupPrompt() {
   document.getElementById('backup-prompt').style.display = 'none';
-}
-
-// ── RESTORE from bootstrap (runs once on fresh device/browser) ──
-function restoreFromBootstrap() {
-  if (!DATA_BOOTSTRAP) return;
-  const hasData = Object.keys(localStorage).some(k => k.startsWith('nos_'));
-  if (hasData) return; // don't overwrite existing data
-  Object.entries(DATA_BOOTSTRAP).forEach(([key, val]) => {
-    localStorage.setItem(key, typeof val === 'string' ? val : JSON.stringify(val));
-  });
 }
 
 // ── THOUGHTS / QUICK CAPTURE ─────────────────────────────
@@ -3990,30 +3965,8 @@ function closeQuality() {
   document.getElementById('q-modal').classList.remove('open');
 }
 
-// ── GROW MODAL ───────────────────────────────────────
-function openGrow() {
-  const m = document.getElementById('grow-modal');
-  m.scrollTop = 0;
-  m.querySelectorAll('.gw-card-body').forEach(b => b.classList.add('open'));
-  m.querySelectorAll('.gw-arr').forEach(a => a.classList.add('open'));
-  m.classList.add('open');
-}
-function closeGrow() {
-  document.getElementById('grow-modal').classList.remove('open');
-}
-function toggleGrow(hd) {
-  const body = hd.nextElementSibling;
-  const arr  = hd.querySelector('.gw-arr');
-  const open = body.classList.contains('open');
-  body.classList.toggle('open', !open);
-  arr.classList.toggle('open', !open);
-}
-
 // ── INIT ─────────────────────────────────────────────────
-restoreFromBootstrap(); // must run first — loads data before anything renders
 initGreeting();
-updateBackupBtn();
-initPWABanner();
 initQuote();
 buildStreaks();
 buildUpcoming();
@@ -4025,6 +3978,192 @@ initToday();
 initLife();
 buildThoughts();
 checkSundayBackup();
+
+// ── PWA: REGISTER SERVICE WORKER ─────────────────────
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./sw.js').catch(() => {});
+  navigator.serviceWorker.addEventListener('message', e => {
+    if (e.data?.type === 'NAV') go(e.data.tab, null);
+  });
+}
+
+// Handle ?tab=xxx deep link (from manifest shortcuts / notification click)
+(function() {
+  const p = new URLSearchParams(location.search).get('tab');
+  if (p) {
+    const btn = document.querySelector(`.nav-tab[onclick*="'${p}'"]`);
+    go(p, btn);
+  }
+})();
+
+// ── ONESIGNAL CONFIG ──────────────────────────────────
+// Replace these with your actual credentials.
+// Sign up at onesignal.com → New App → Web Push → set your GitHub Pages URL as Site URL.
+const NOS_ONESIGNAL_APP_ID   = 'YOUR_ONESIGNAL_APP_ID';
+const NOS_ONESIGNAL_REST_KEY  = 'YOUR_ONESIGNAL_REST_API_KEY';
+
+window.OneSignalDeferred = window.OneSignalDeferred || [];
+OneSignalDeferred.push(async function(OneSignal) {
+  await OneSignal.init({
+    appId: NOS_ONESIGNAL_APP_ID,
+    notifyButton: { enable: false },
+    welcomeNotification: { disable: true },
+    serviceWorkerPath: 'OneSignalSDKWorker.js'
+  });
+
+  const playerId = await OneSignal.getUserId();
+  if (playerId) localStorage.setItem('nos_onesignal_player_id', playerId);
+
+  OneSignal.on('subscriptionChange', async (isSubscribed) => {
+    if (isSubscribed) {
+      const pid = await OneSignal.getUserId();
+      if (pid) localStorage.setItem('nos_onesignal_player_id', pid);
+      updateNotifUI(true);
+    }
+  });
+});
+
+// ── NOTIFICATION PERMISSION UI ────────────────────────
+async function requestPushPermission() {
+  if (!('Notification' in window)) {
+    alert('Add this app to your Home Screen first (iOS 16.4+):\nSafari → Share → Add to Home Screen\nThen reopen and try again.');
+    return;
+  }
+  if (Notification.permission === 'denied') {
+    alert('Notifications are blocked. Go to Settings → Safari → your site → Notifications and enable them.');
+    return;
+  }
+  window.OneSignalDeferred = window.OneSignalDeferred || [];
+  OneSignalDeferred.push(async function(OneSignal) {
+    await OneSignal.showNativePrompt();
+  });
+}
+
+function updateNotifUI(granted) {
+  const btn = document.getElementById('notif-enable-btn');
+  const statusEl = document.getElementById('notif-perm-status');
+  const reminderRow = document.getElementById('notif-reminder-row');
+  const timeRow = document.getElementById('notif-time-row');
+  if (!btn) return;
+  if (granted) {
+    btn.textContent = 'Enabled ✓';
+    btn.classList.add('enabled');
+    btn.onclick = null;
+    if (statusEl) statusEl.textContent = 'Notifications are active';
+    if (reminderRow) reminderRow.style.display = 'flex';
+    if (timeRow) timeRow.style.display = 'flex';
+    const saved = localStorage.getItem('nos_reminder_time');
+    if (saved) {
+      const ti = document.getElementById('notif-reminder-time');
+      const rs = document.getElementById('notif-reminder-status');
+      if (ti) ti.value = saved;
+      if (rs) rs.textContent = `Reminder set for ${saved}`;
+    }
+  } else {
+    btn.textContent = 'Enable';
+    btn.classList.remove('enabled');
+    if (statusEl) statusEl.textContent = 'Enable to receive daily reminders and task alerts';
+    if (reminderRow) reminderRow.style.display = 'none';
+    if (timeRow) timeRow.style.display = 'none';
+  }
+}
+
+// ── DAILY HABIT REMINDER ──────────────────────────────
+async function saveHabitReminder() {
+  const time = document.getElementById('notif-reminder-time').value;
+  if (!time) return;
+  localStorage.setItem('nos_reminder_time', time);
+  document.getElementById('notif-reminder-status').textContent = `Reminder set for ${time}`;
+
+  const playerId = localStorage.getItem('nos_onesignal_player_id');
+  if (!playerId || NOS_ONESIGNAL_REST_KEY === 'YOUR_ONESIGNAL_REST_API_KEY') return;
+
+  const [hh, mm] = time.split(':').map(Number);
+  const sendAt = new Date();
+  sendAt.setHours(hh, mm, 0, 0);
+  if (sendAt <= new Date()) sendAt.setDate(sendAt.getDate() + 1);
+
+  try {
+    await fetch('https://onesignal.com/api/v1/notifications', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${NOS_ONESIGNAL_REST_KEY}` },
+      body: JSON.stringify({
+        app_id: NOS_ONESIGNAL_APP_ID,
+        include_player_ids: [playerId],
+        headings: { en: '🌅 Morning ritual time' },
+        contents: { en: 'Your habit checklist is waiting. Open Personal OS.' },
+        send_after: sendAt.toISOString(),
+        url: location.origin + '/?tab=today'
+      })
+    });
+  } catch(e) {}
+}
+
+// ── TASK DUE-DATE PUSH ────────────────────────────────
+async function scheduleTaskPush(taskId, text, dueDate) {
+  const playerId = localStorage.getItem('nos_onesignal_player_id');
+  if (!playerId || NOS_ONESIGNAL_REST_KEY === 'YOUR_ONESIGNAL_REST_API_KEY') return;
+  if (dueDate <= new Date()) return;
+  try {
+    const resp = await fetch('https://onesignal.com/api/v1/notifications', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Basic ${NOS_ONESIGNAL_REST_KEY}` },
+      body: JSON.stringify({
+        app_id: NOS_ONESIGNAL_APP_ID,
+        include_player_ids: [playerId],
+        headings: { en: '📋 Task due now' },
+        contents: { en: text },
+        send_after: dueDate.toISOString(),
+        url: location.origin + '/?tab=startup'
+      })
+    });
+    const r = await resp.json();
+    if (r.id) {
+      const map = JSON.parse(localStorage.getItem('nos_notif_map') || '{}');
+      map[taskId] = r.id;
+      localStorage.setItem('nos_notif_map', JSON.stringify(map));
+    }
+  } catch(e) {}
+}
+
+async function cancelTaskPush(taskId) {
+  const map = JSON.parse(localStorage.getItem('nos_notif_map') || '{}');
+  const notifId = map[taskId];
+  if (!notifId || NOS_ONESIGNAL_REST_KEY === 'YOUR_ONESIGNAL_REST_API_KEY') return;
+  try {
+    await fetch(`https://onesignal.com/api/v1/notifications/${notifId}?app_id=${NOS_ONESIGNAL_APP_ID}`, {
+      method: 'DELETE',
+      headers: { 'Authorization': `Basic ${NOS_ONESIGNAL_REST_KEY}` }
+    });
+    delete map[taskId];
+    localStorage.setItem('nos_notif_map', JSON.stringify(map));
+  } catch(e) {}
+}
+
+// ── CHECK OVERDUE TASKS ON LAUNCH ────────────────────
+function checkDueTasksOnOpen() {
+  const now = new Date();
+  const overdue = getTasks().filter(t => !t.done && t.due && new Date(t.due) <= now);
+  if (!overdue.length) return;
+  const label = overdue.length === 1
+    ? `"${overdue[0].text}" is overdue.`
+    : `${overdue.length} tasks are overdue.`;
+  const toast = document.getElementById('due-toast');
+  document.getElementById('due-toast-msg').textContent = label + ' Tap Startup tab to review.';
+  toast.classList.add('visible');
+  setTimeout(() => toast.classList.remove('visible'), 8000);
+}
+checkDueTasksOnOpen();
+
+// ── INIT NOTIFICATION UI STATE ────────────────────────
+updateNotifUI(Notification?.permission === 'granted');
+
+// Patch deleteTask to cancel push before removing
+const _origDeleteTask = deleteTask;
+deleteTask = function(evt, id) {
+  cancelTaskPush(id);
+  _origDeleteTask(evt, id);
+};
 
 </script>
 </body>
