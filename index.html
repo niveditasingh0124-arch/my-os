@@ -4072,18 +4072,34 @@ OneSignalDeferred.push(async function(OneSignal) {
 
 // ── NOTIFICATION PERMISSION UI ────────────────────────
 async function requestPushPermission() {
-  if (!('Notification' in window)) {
-    alert('Add this app to your Home Screen first (iOS 16.4+):\nSafari → Share → Add to Home Screen\nThen reopen and try again.');
+  const isStandalone = window.navigator.standalone === true ||
+                       window.matchMedia('(display-mode: standalone)').matches;
+
+  if (!('Notification' in window) || !isStandalone) {
+    alert('Push notifications require the app to be installed first.\n\n1. Open this page in Safari\n2. Tap the Share icon (□↑)\n3. Tap "Add to Home Screen"\n4. Open the app from your home screen\n5. Tap Enable again');
     return;
   }
+
   if (Notification.permission === 'denied') {
-    alert('Notifications are blocked. Go to Settings → Safari → your site → Notifications and enable them.');
+    alert('Notifications are blocked.\nGo to: Settings → Nivedita OS → Notifications → Allow');
     return;
   }
-  window.OneSignalDeferred = window.OneSignalDeferred || [];
-  OneSignalDeferred.push(async function(OneSignal) {
-    await OneSignal.showNativePrompt();
-  });
+
+  if (Notification.permission === 'granted') {
+    updateNotifUI(true);
+    return;
+  }
+
+  const result = await Notification.requestPermission();
+  updateNotifUI(result === 'granted');
+
+  // Also subscribe via OneSignal if configured
+  if (result === 'granted' && NOS_ONESIGNAL_APP_ID !== 'YOUR_ONESIGNAL_APP_ID') {
+    window.OneSignalDeferred = window.OneSignalDeferred || [];
+    OneSignalDeferred.push(async function(OneSignal) {
+      try { await OneSignal.showNativePrompt(); } catch(e) {}
+    });
+  }
 }
 
 function updateNotifUI(granted) {
