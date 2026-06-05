@@ -509,6 +509,25 @@ html, body {
 .gw-card-title { font-size: 13.5px; font-weight: 600; color: #6B4C00; flex: 1; line-height: 1.35; }
 .gw-arr { font-size: 14px; color: var(--gold); transition: transform 0.22s; flex-shrink: 0; }
 .gw-arr.open { transform: rotate(180deg); }
+.gw-hd {
+  padding: 14px 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--gold-light); user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.gw-hd-inner { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; }
+.gw-num {
+  background: var(--gold); color: white; width: 26px; height: 26px;
+  border-radius: 50%; display: flex; align-items: center; justify-content: center;
+  font-size: 11px; font-family: -apple-system,Arial,sans-serif;
+  font-weight: 700; flex-shrink: 0;
+}
+.gw-title { font-size: 13.5px; font-weight: 600; color: #6B4C00; line-height: 1.35; }
+.gw-body { display: none; padding: 16px; background: white; }
+.gw-body.open { display: block; }
+.gw-body p { font-size: 13px; line-height: 1.85; margin-bottom: 10px; color: #2C3E50; font-family: -apple-system,Arial,sans-serif; }
+.gw-body p:last-child { margin-bottom: 0; }
+.gw-body strong { color: var(--gold); }
 .gw-card-body { display: none; padding: 16px; background: white; }
 .gw-card-body.open { display: block; }
 .gw-card-body p { font-size: 13px; line-height: 1.85; margin-bottom: 10px; color: #2C3E50; font-family: -apple-system,Arial,sans-serif; }
@@ -3491,6 +3510,28 @@ function buildBodyCare() {
       </div>
     </div>`;
   }).join('');
+}
+
+// ── GROW MODAL ────────────────────────────────────────
+function openGrow() {
+  document.getElementById('grow-modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeGrow() {
+  document.getElementById('grow-modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+function toggleGrow(hd) {
+  const body = hd.nextElementSibling;
+  const arr  = hd.querySelector('.gw-arr');
+  const isOpen = body.classList.contains('open');
+  // Close all others
+  document.querySelectorAll('.gw-body.open').forEach(b => b.classList.remove('open'));
+  document.querySelectorAll('.gw-arr.open').forEach(a => a.classList.remove('open'));
+  if (!isOpen) {
+    body.classList.add('open');
+    if (arr) arr.classList.add('open');
+  }
 }
 
 function openRoutine() {
